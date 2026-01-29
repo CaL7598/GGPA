@@ -30,81 +30,6 @@ const About: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Founder Profile */}
-        <section className="mb-12 sm:mb-16 lg:mb-24">
-          <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 xl:p-20 shadow-sm border border-slate-100">
-            <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 items-start">
-              <div className="lg:col-span-1">
-                <img 
-                  src={founderImage} 
-                  alt={state.founder.name}
-                  className="w-full rounded-2xl sm:rounded-3xl shadow-xl mb-4 sm:mb-6 object-cover"
-                />
-                <div className="text-center lg:text-left">
-                  <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2">{state.founder.name}</h3>
-                  <p className="text-sm sm:text-base text-slate-600 font-medium mb-3 sm:mb-4">{state.founder.title}</p>
-                  <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Founder & CEO</span>
-                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Commonwealth DSG Nominee</span>
-                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Researcher (IR)</span>
-                  </div>
-                </div>
-              </div>
-              <div className="lg:col-span-2 space-y-6">
-                <div>
-                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Professional Overview</h4>
-                  <p className="text-slate-700 leading-relaxed">
-                    As the Founder and CEO, David serves as the primary link between the Board of Directors and the Management Team. He is responsible for translating the GGPA's high-level Strategic Plan into actionable operational results that drive global impact. Under his leadership, the organization bridges the gap between visionary policy and on-the-ground administrative execution.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">International Diplomatic Standing</h4>
-                  <p className="text-slate-700 leading-relaxed">
-                    David is recognized as an authoritative voice in international politics. His global standing is evidenced by his nomination by the Ghanaian Ministry of Foreign Affairs for the position of Deputy Secretary-General (Programme) of the Commonwealth Secretariat in London. This nomination reflects his unique ability to navigate complex diplomatic corridors and manage multi-lateral relations at the highest levels of global governance.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Research & Academic Rigor</h4>
-                  <ul className="space-y-3 text-slate-700">
-                    <li className="flex items-start gap-3">
-                      <GraduationCap className="text-amber-600 shrink-0 mt-1" size={20} />
-                      <div>
-                        <strong>Researcher (International Relations):</strong> His ongoing research focuses on geopolitics and public policy, providing a scientific, evidence-based foundation for GGPA's policy frameworks.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FileText className="text-amber-600 shrink-0 mt-1" size={20} />
-                      <div>
-                        <strong>Legal Expertise:</strong> David holds a Bachelor of Laws (LLB), empowering him with deep knowledge of international legal frameworks, statutory compliance, and human rights standards.
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <Globe className="text-amber-600 shrink-0 mt-1" size={20} />
-                      <div>
-                        <strong>Global Policy Contributions:</strong> He provided strategic input and research to the UN Special Rapporteur's 2025 thematic report for the UN General Assembly, specifically regarding the concentration of corporate power in food systems and its impact on human rights.
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Institutional Leadership</h4>
-                  <ul className="space-y-3 text-slate-700">
-                    <li><strong>Assistant Registrar (UENR):</strong> At the University of Energy and Natural Resources (UENR) in Ghana, David has led internationalization efforts, the modernization of institutional policy, and technical capacity building for student leaders.</li>
-                    <li><strong>Erasmus+ Mobility Manager:</strong> He manages international credit mobility and faculty exchanges with European partner universities, fostering intercultural skills and global academic networking between Africa and the EU.</li>
-                    <li><strong>Youth Advocate:</strong> He has pioneered the "Critical Youth Mandate" within the GGPA, ensuring that young people are not just observers but direct contributors to national and global policy-making through functional authority.</li>
-                  </ul>
-                </div>
-                <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100">
-                  <h4 className="text-amber-900 font-bold text-sm tracking-widest uppercase mb-2">The Decade Vision</h4>
-                  <p className="text-amber-800 leading-relaxed">
-                    David has positioned the GGPA as a vital partner for the African Union (AU) and The Commonwealth. His vision for the next decade is to establish the GGPA as the leading African-based, globally aligned institution that empowers the rising generation to lead with integrity, transparency, and scientific precision.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Executive Council */}
         <section className="mb-12 sm:mb-16 lg:mb-24">
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
@@ -299,6 +224,81 @@ const About: React.FC = () => {
               <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
                 <h4 className="font-bold mb-2">Act 992 Registered</h4>
                 <p className="text-sm text-slate-300">Legally registered under Ghana Companies Act, 2019</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Founder Profile */}
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 xl:p-20 shadow-sm border border-slate-100">
+            <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 items-start">
+              <div className="lg:col-span-1">
+                <img 
+                  src={founderImage} 
+                  alt={state.founder.name}
+                  className="w-full rounded-2xl sm:rounded-3xl shadow-xl mb-4 sm:mb-6 object-cover"
+                />
+                <div className="text-center lg:text-left">
+                  <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2">{state.founder.name}</h3>
+                  <p className="text-sm sm:text-base text-slate-600 font-medium mb-3 sm:mb-4">{state.founder.title}</p>
+                  <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Founder & CEO</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Commonwealth DSG Nominee</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Researcher (IR)</span>
+                  </div>
+                </div>
+              </div>
+              <div className="lg:col-span-2 space-y-6">
+                <div>
+                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Professional Overview</h4>
+                  <p className="text-slate-700 leading-relaxed">
+                    As the Founder and CEO, David serves as the primary link between the Board of Directors and the Management Team. He is responsible for translating the GGPA's high-level Strategic Plan into actionable operational results that drive global impact. Under his leadership, the organization bridges the gap between visionary policy and on-the-ground administrative execution.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">International Diplomatic Standing</h4>
+                  <p className="text-slate-700 leading-relaxed">
+                    David is recognized as an authoritative voice in international politics. His global standing is evidenced by his nomination by the Ghanaian Ministry of Foreign Affairs for the position of Deputy Secretary-General (Programme) of the Commonwealth Secretariat in London. This nomination reflects his unique ability to navigate complex diplomatic corridors and manage multi-lateral relations at the highest levels of global governance.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Research & Academic Rigor</h4>
+                  <ul className="space-y-3 text-slate-700">
+                    <li className="flex items-start gap-3">
+                      <GraduationCap className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>Researcher (International Relations):</strong> His ongoing research focuses on geopolitics and public policy, providing a scientific, evidence-based foundation for GGPA's policy frameworks.
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FileText className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>Legal Expertise:</strong> David holds a Bachelor of Laws (LLB), empowering him with deep knowledge of international legal frameworks, statutory compliance, and human rights standards.
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Globe className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>Global Policy Contributions:</strong> He provided strategic input and research to the UN Special Rapporteur's 2025 thematic report for the UN General Assembly, specifically regarding the concentration of corporate power in food systems and its impact on human rights.
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Institutional Leadership</h4>
+                  <ul className="space-y-3 text-slate-700">
+                    <li><strong>Assistant Registrar (UENR):</strong> At the University of Energy and Natural Resources (UENR) in Ghana, David has led internationalization efforts, the modernization of institutional policy, and technical capacity building for student leaders.</li>
+                    <li><strong>Erasmus+ Mobility Manager:</strong> He manages international credit mobility and faculty exchanges with European partner universities, fostering intercultural skills and global academic networking between Africa and the EU.</li>
+                    <li><strong>Youth Advocate:</strong> He has pioneered the "Critical Youth Mandate" within the GGPA, ensuring that young people are not just observers but direct contributors to national and global policy-making through functional authority.</li>
+                  </ul>
+                </div>
+                <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100">
+                  <h4 className="text-amber-900 font-bold text-sm tracking-widest uppercase mb-2">The Decade Vision</h4>
+                  <p className="text-amber-800 leading-relaxed">
+                    David has positioned the GGPA as a vital partner for the African Union (AU) and The Commonwealth. His vision for the next decade is to establish the GGPA as the leading African-based, globally aligned institution that empowers the rising generation to lead with integrity, transparency, and scientific precision.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
