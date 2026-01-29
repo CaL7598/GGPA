@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ggpa-website
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+    # Add your Supabase environment variables here or in Render dashboard
+    # - key: VITE_SUPABASE_URL
+    #   value: your-supabase-url
+    # - key: VITE_SUPABASE_ANON_KEY
+    #   value: your-supabase-key
