@@ -1,0 +1,8 @@
+{
+  "name": "GGPA - Global Governance & Policy Alliance",
+  "description": "A high-tier digital platform for the Global Governance & Policy Alliance, featuring a 5,000-page technical compendium, governance index diagnostics, and fellowship portals for global diplomatic leadership.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
