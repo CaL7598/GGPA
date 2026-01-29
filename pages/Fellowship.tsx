@@ -32,28 +32,35 @@ const Fellowship: React.FC = () => {
   return (
     <div className="pb-24">
       {/* Hero Section */}
-      <div className="bg-slate-900 text-white py-24 mb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-20 text-white/5 pointer-events-none">
-          <Users size={400} />
+      <div className="bg-slate-900 text-white py-12 sm:py-16 lg:py-24 mb-12 sm:mb-16 lg:mb-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img 
+            src="https://img.freepik.com/free-photo/diverse-african-professionals-working-together-modern-office_1150-10188.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TEAM_DIVERSITY"
+            alt="African professionals"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute top-0 right-0 p-8 sm:p-12 lg:p-20 text-white/5 pointer-events-none z-0">
+          <Users size={200} className="sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px]" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-black uppercase tracking-widest mb-6 border border-amber-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-4 sm:mb-6 border border-amber-500/20">
               The Youth Advisory Corps
             </div>
-            <h1 className="text-5xl font-bold font-serif mb-8">Join the Technical Elite</h1>
-            <p className="text-xl text-slate-400 leading-relaxed mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif mb-4 sm:mb-6 lg:mb-8">Join the Technical Elite</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 leading-relaxed mb-4 sm:mb-6">
               We don't seek activists; we seek Experts. Architects of Integrity. The Youth Advisory Corps (YAC) is the gateway to functional authority in global governance.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
               <div className="flex -space-x-2">
                 {[1,2,3,4,5].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full bg-amber-500 border-2 border-slate-900 flex items-center justify-center text-xs font-bold">
+                  <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-amber-500 border-2 border-slate-900 flex items-center justify-center text-[10px] sm:text-xs font-bold">
                     {i}
                   </div>
                 ))}
               </div>
-              <span className="text-slate-300 text-sm">120+ Active Fellows</span>
+              <span className="text-slate-300 text-xs sm:text-sm">120+ Active Fellows</span>
             </div>
           </div>
         </div>
@@ -61,15 +68,15 @@ const Fellowship: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* The Mandate */}
-        <section className="mb-24">
-          <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-[3rem] p-12 lg:p-20">
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 xl:p-20">
             <div className="max-w-4xl mx-auto text-center">
-              <Shield className="mx-auto mb-6 text-amber-600" size={48} />
-              <h2 className="text-4xl font-bold font-serif mb-6">The Mandate</h2>
-              <p className="text-xl text-slate-700 leading-relaxed mb-8">
+              <Shield className="mx-auto mb-4 sm:mb-6 text-amber-600 w-10 h-10 sm:w-12 sm:h-12" />
+              <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-4 sm:mb-6">The Mandate</h2>
+              <p className="text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed mb-6 sm:mb-8 px-4">
                 "We don't seek activists; we seek Experts. Architects of Integrity. Functional Authority means that when a youth leader enters a Ministry, they aren't there to protest—they are there to audit, to digitize, and to implement IPSAS-compliant frameworks."
               </p>
-              <div className="grid md:grid-cols-3 gap-6 mt-12">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
                 <div className="bg-white p-6 rounded-2xl shadow-sm">
                   <Target className="text-amber-600 mx-auto mb-4" size={32} />
                   <h3 className="font-bold mb-2">Technical Excellence</h3>
@@ -98,17 +105,29 @@ const Fellowship: React.FC = () => {
               Choose your specialization track. Each track provides specialized training and access to relevant volumes of the Compendium.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {tracks.map((track) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {tracks.map((track, index) => (
               <div 
                 key={track.id}
-                className={`bg-white rounded-[2.5rem] p-8 shadow-sm border-2 transition-all cursor-pointer ${
+                className={`bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border-2 transition-all cursor-pointer overflow-hidden ${
                   selectedTrack === track.id 
                     ? 'border-amber-500 shadow-xl' 
                     : 'border-slate-100 hover:border-amber-200'
                 }`}
                 onClick={() => setSelectedTrack(selectedTrack === track.id ? null : track.id)}
               >
+                <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
+                  <img 
+                    src={index === 0 
+                      ? "https://img.freepik.com/free-photo/young-african-professional-lawyer-legal-documents_1150-10189.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_LEGAL_TRACK"
+                      : index === 1
+                      ? "https://img.freepik.com/free-photo/african-professional-accountant-analyzing-financial-reports_1150-10190.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_ECONOMIC_TRACK"
+                      : "https://img.freepik.com/free-photo/young-african-tech-professional-coding-laptop_1150-10191.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_DIGITAL_TRACK"
+                    }
+                    alt={track.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
                 <div className="flex items-center justify-between mb-6">
                   <div className="bg-slate-900 p-3 rounded-xl">
                     <FileText className="text-amber-400" size={24} />

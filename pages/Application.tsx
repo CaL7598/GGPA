@@ -71,32 +71,32 @@ const Application: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-24">
+    <div className="min-h-screen bg-slate-50 py-12 sm:py-16 lg:py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-10 lg:mb-12">
           <Link 
             to="/fellowship"
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-bold mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 font-bold mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={16} className="sm:w-[18px] sm:h-[18px]" />
             Back to Fellowship
           </Link>
-          <h1 className="text-5xl font-bold font-serif mb-4 text-slate-900">YAC Application Form</h1>
-          <p className="text-slate-600 text-lg">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif mb-3 sm:mb-4 text-slate-900">YAC Application Form</h1>
+          <p className="text-slate-600 text-base sm:text-lg">
             Join the Technical Elite. Complete the form below to begin your journey as an Architect of Integrity.
           </p>
         </div>
 
         {/* Application Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-[3rem] p-8 lg:p-12 shadow-sm border border-slate-100 space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 shadow-sm border border-slate-100 space-y-6 sm:space-y-8">
           {/* Personal Information */}
           <section>
-            <h2 className="text-2xl font-bold font-serif mb-6 flex items-center gap-3">
-              <User className="text-amber-600" size={28} />
+            <h2 className="text-xl sm:text-2xl font-bold font-serif mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+              <User className="text-amber-600 w-6 h-6 sm:w-7 sm:h-7" />
               Personal Information
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2">First Name *</label>
                 <input

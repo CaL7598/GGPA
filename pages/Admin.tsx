@@ -1,37 +1,93 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
-import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone, LogOut } from 'lucide-react';
+import AdminLogin from './AdminLogin';
+import { uploadImage } from '../lib/supabaseService';
+import { supabase } from '../lib/supabase';
 
 const Admin: React.FC = () => {
-  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, resetToDefault } = useContent();
-  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact'>('content');
+  const { user, loading: authLoading, signOut, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, updatePrograms, resetToDefault } = useContent();
+  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs'>('content');
   const [saveStatus, setSaveStatus] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      // Redirect handled by showing login component
+    }
+  }, [user, authLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AdminLogin />;
+  }
 
   const handleSave = () => {
     setSaveStatus(true);
     setTimeout(() => setSaveStatus(false), 2000);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'hero' | 'founder' | 'gallery') => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'hero' | 'founder' | 'gallery' | 'program', programId?: keyof typeof state.programs) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
-      if (type === 'hero') updateHero({ ...state.hero, image: base64 });
-      if (type === 'founder') updateFounder({ ...state.founder, image: base64 });
-      if (type === 'gallery') {
-        addGalleryImage({
-          id: Date.now().toString(),
-          url: base64,
-          caption: "New Institutional Photo",
-          date: new Date().toLocaleDateString()
+    // Check if Supabase is configured
+    const isSupabaseConfigured = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
+    
+    let imageUrl: string;
+
+    if (isSupabaseConfigured && user) {
+      // Upload to Supabase Storage
+      const path = type === 'gallery' ? 'gallery' : type === 'program' ? 'programs' : type;
+      const uploadedUrl = await uploadImage(file, path);
+      
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      } else {
+        // Fallback to base64 if upload fails
+        const reader = new FileReader();
+        imageUrl = await new Promise((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(file);
         });
       }
-    };
-    reader.readAsDataURL(file);
+    } else {
+      // Fallback to base64 if Supabase not configured
+      const reader = new FileReader();
+      imageUrl = await new Promise((resolve) => {
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Update state
+    if (type === 'hero') updateHero({ ...state.hero, image: imageUrl });
+    if (type === 'founder') updateFounder({ ...state.founder, image: imageUrl });
+    if (type === 'gallery') {
+      addGalleryImage({
+        id: Date.now().toString(),
+        url: imageUrl,
+        caption: "New Institutional Photo",
+        date: new Date().toLocaleDateString()
+      });
+    }
+    if (type === 'program' && programId) {
+      updatePrograms({ ...state.programs, [programId]: imageUrl });
+    }
   };
 
   return (
@@ -44,8 +100,18 @@ const Admin: React.FC = () => {
               <h1 className="text-4xl font-bold font-serif text-slate-900">Secretariat Command Center</h1>
             </div>
             <p className="text-slate-500">Manage institutional content, documents, and media without code intervention.</p>
+            <p className="text-xs text-slate-400 mt-1">Logged in as: {user.email}</p>
           </div>
           <div className="flex gap-4">
+            <button 
+              onClick={async () => {
+                await signOut();
+                navigate('/');
+              }}
+              className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all"
+            >
+              <LogOut size={18} /> Sign Out
+            </button>
             <button 
               onClick={resetToDefault}
               className="flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all"
@@ -61,12 +127,13 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex bg-white p-1 rounded-2xl border border-slate-200 mb-8 max-w-md">
+        <div className="flex bg-white p-1 rounded-2xl border border-slate-200 mb-8 max-w-2xl overflow-x-auto">
           {[
             { id: 'content', icon: <Type size={18} />, label: 'Page Content' },
             { id: 'news', icon: <FileText size={18} />, label: 'GGPA News' },
             { id: 'gallery', icon: <Image size={18} />, label: 'Media Vault' },
             { id: 'contact', icon: <Phone size={18} />, label: 'Contact Info' },
+            { id: 'programs', icon: <LayoutDashboard size={18} />, label: 'Programs' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -315,6 +382,98 @@ const Admin: React.FC = () => {
                       className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
                       placeholder="yac@ggpa-global.org"
                     />
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {activeTab === 'programs' && (
+            <div className="space-y-12 animate-in slide-in-from-right duration-500">
+              <section>
+                <h3 className="text-xl font-bold font-serif mb-6 flex items-center gap-2">
+                  <LayoutDashboard className="text-amber-600" size={24} />
+                  Programs & Initiatives Images
+                </h3>
+                <p className="text-slate-600 mb-8 text-sm">
+                  Manage images for the Programs & Initiatives section on the Pillars page. Upload new images to replace the current ones.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Global Governance Forum */}
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      Global Governance Forum
+                    </label>
+                    <div className="relative group rounded-2xl overflow-hidden border border-slate-200 h-48 bg-slate-100">
+                      <img src={state.programs.globalGovernanceForum} className="w-full h-full object-cover" alt="Global Governance Forum" />
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'program', 'globalGovernanceForum')} 
+                        />
+                        <span className="text-white font-bold text-sm underline">Change Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Youth Governance Fellowship */}
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      Youth Governance Fellowship
+                    </label>
+                    <div className="relative group rounded-2xl overflow-hidden border border-slate-200 h-48 bg-slate-100">
+                      <img src={state.programs.youthGovernanceFellowship} className="w-full h-full object-cover" alt="Youth Governance Fellowship" />
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'program', 'youthGovernanceFellowship')} 
+                        />
+                        <span className="text-white font-bold text-sm underline">Change Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Public Policy Innovation Lab */}
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      Public Policy Innovation Lab
+                    </label>
+                    <div className="relative group rounded-2xl overflow-hidden border border-slate-200 h-48 bg-slate-100">
+                      <img src={state.programs.publicPolicyInnovationLab} className="w-full h-full object-cover" alt="Public Policy Innovation Lab" />
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'program', 'publicPolicyInnovationLab')} 
+                        />
+                        <span className="text-white font-bold text-sm underline">Change Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Governance Excellence Award */}
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      Governance Excellence Award
+                    </label>
+                    <div className="relative group rounded-2xl overflow-hidden border border-slate-200 h-48 bg-slate-100">
+                      <img src={state.programs.governanceExcellenceAward} className="w-full h-full object-cover" alt="Governance Excellence Award" />
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={(e) => handleFileUpload(e, 'program', 'governanceExcellenceAward')} 
+                        />
+                        <span className="text-white font-bold text-sm underline">Change Image</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </section>

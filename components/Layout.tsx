@@ -28,29 +28,23 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   className="h-10 w-auto object-contain"
                 />
                 <div className="flex flex-col">
-                  <span className={`text-xl font-bold font-serif leading-none tracking-tight ${scrolled ? 'text-slate-900' : 'text-slate-900'}`}>GGPA</span>
-                  <span className={`text-[10px] uppercase tracking-[0.2em] font-medium ${scrolled ? 'text-slate-500' : 'text-slate-600'}`}>Global Governance & Policy Alliance</span>
+                  <span className={`text-lg sm:text-xl font-bold font-serif leading-none tracking-tight ${scrolled ? 'text-slate-900' : 'text-slate-900'}`}>GGPA</span>
+                  <span className={`text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-medium hidden xs:block ${scrolled ? 'text-slate-500' : 'text-slate-600'}`}>Global Governance & Policy Alliance</span>
                 </div>
               </a>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`text-sm font-semibold hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
+                  className={`text-xs lg:text-sm font-semibold hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
                 >
                   {link.name}
                 </a>
               ))}
-              <a 
-                href="#/compendium" 
-                className="bg-slate-900 text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-slate-800 transition-all transform hover:scale-105"
-              >
-                The Compendium
-              </a>
             </div>
 
             {/* Mobile menu button */}
@@ -76,26 +70,19 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   {link.name}
                 </a>
               ))}
-              <a 
-                href="#/compendium"
-                className="block mt-4 text-center bg-slate-900 text-white px-5 py-4 rounded-xl font-bold"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Access The Compendium
-              </a>
             </div>
           </div>
         )}
       </nav>
 
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-16 sm:pt-20">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white pt-20 pb-10">
+      <footer className="bg-slate-900 text-white pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <img 
@@ -152,14 +139,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
           </div>
 
-          <div className="pt-10 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-slate-500 text-xs">
+          <div className="pt-8 sm:pt-10 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+            <p className="text-slate-500 text-xs text-center sm:text-left">
               © 2026 GGPA. Registered entity under Ghana Companies Act, 2019 (Act 992). All Rights Reserved.
             </p>
-            <div className="flex gap-8 text-xs text-slate-500">
-              <a href="#" className="hover:text-white">Privacy Policy</a>
-              <a href="#" className="hover:text-white">Data Ethics</a>
-              <a href="#" className="hover:text-white">Press Room</a>
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-xs text-slate-500">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Data Ethics</a>
+              <a href="#" className="hover:text-white transition-colors">Press Room</a>
             </div>
           </div>
         </div>

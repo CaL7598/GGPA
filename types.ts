@@ -52,6 +52,13 @@ export interface ContactInfo {
   yacEmail?: string;
 }
 
+export interface Programs {
+  globalGovernanceForum: string;
+  youthGovernanceFellowship: string;
+  publicPolicyInnovationLab: string;
+  governanceExcellenceAward: string;
+}
+
 export interface AppState {
   hero: {
     headline: string;
@@ -69,4 +76,5 @@ export interface AppState {
   compendium: VolumeCategory[];
   gallery: GalleryImage[];
   contact: ContactInfo;
+  programs: Programs;
 }

@@ -14,6 +14,7 @@ import NewsPage from './pages/NewsPage';
 import ArticlePage from './pages/ArticlePage';
 import Application from './pages/Application';
 import { ContentProvider } from './context/ContentContext';
+import { AuthProvider } from './context/AuthContext';
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
@@ -78,26 +79,28 @@ const App: React.FC = () => {
   
   return (
     <ErrorBoundary>
-      <ContentProvider>
-        <Router>
-          <ScrollToTop />
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/compendium" element={<Compendium />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/pillars" element={<Pillars />} />
-              <Route path="/fellowship" element={<Fellowship />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/news" element={<NewsPage />} />
-              <Route path="/news/:id" element={<ArticlePage />} />
-              <Route path="/application" element={<Application />} />
-            </Routes>
-          </Layout>
-        </Router>
-      </ContentProvider>
+      <AuthProvider>
+        <ContentProvider>
+          <Router>
+            <ScrollToTop />
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/compendium" element={<Compendium />} />
+                <Route path="/gallery" element={<GalleryPage />} />
+                <Route path="/pillars" element={<Pillars />} />
+                <Route path="/fellowship" element={<Fellowship />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/news" element={<NewsPage />} />
+                <Route path="/news/:id" element={<ArticlePage />} />
+                <Route path="/application" element={<Application />} />
+              </Routes>
+            </Layout>
+          </Router>
+        </ContentProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 };

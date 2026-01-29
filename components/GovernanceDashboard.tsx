@@ -24,36 +24,36 @@ const GovernanceDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'velocity' | 'transparency'>('velocity');
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-12 sm:py-16 lg:py-24 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold font-serif mb-4">GGPA Governance Index</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-3 sm:mb-4">GGPA Governance Index</h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto px-4">
             Real-time diagnostics of administrative velocity and institutional integrity across the Commonwealth.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-            <div className="flex justify-between items-center mb-10">
-              <h3 className="text-xl font-bold font-serif">Administrative Velocity by Nation</h3>
-              <div className="flex bg-slate-100 p-1 rounded-xl">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="lg:col-span-2 bg-white p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border border-slate-100">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 lg:mb-10">
+              <h3 className="text-lg sm:text-xl font-bold font-serif">Administrative Velocity by Nation</h3>
+              <div className="flex bg-slate-100 p-1 rounded-xl w-full sm:w-auto">
                 <button 
                   onClick={() => setActiveTab('velocity')}
-                  className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'velocity' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500'}`}
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${activeTab === 'velocity' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500'}`}
                 >
                   Velocity
                 </button>
                 <button 
                   onClick={() => setActiveTab('transparency')}
-                  className={`px-4 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'transparency' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500'}`}
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${activeTab === 'transparency' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500'}`}
                 >
                   Transparency
                 </button>
               </div>
             </div>
             
-            <div className="h-[400px]">
+            <div className="h-[300px] sm:h-[350px] lg:h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -73,24 +73,24 @@ const GovernanceDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-8">
-            <div className="bg-slate-900 text-white p-8 rounded-[2rem] relative overflow-hidden flex-grow">
-              <div className="absolute top-0 right-0 p-6 opacity-20">
-                <Shield size={80} />
+          <div className="flex flex-col gap-6 sm:gap-8">
+            <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] relative overflow-hidden flex-grow">
+              <div className="absolute top-0 right-0 p-4 sm:p-6 opacity-20">
+                <Shield size={60} className="sm:w-20 sm:h-20" />
               </div>
-              <h3 className="text-xl font-bold font-serif mb-4 relative z-10">Institutional Integrity Audit</h3>
-              <p className="text-slate-400 text-sm mb-6 relative z-10">
+              <h3 className="text-lg sm:text-xl font-bold font-serif mb-3 sm:mb-4 relative z-10">Institutional Integrity Audit</h3>
+              <p className="text-slate-400 text-xs sm:text-sm mb-4 sm:mb-6 relative z-10">
                 Does your institution meet global standards? Book an IIGRA diagnostic.
               </p>
-              <button className="flex items-center gap-2 bg-amber-500 text-slate-900 px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-400 transition-all">
+              <button className="flex items-center gap-2 bg-amber-500 text-slate-900 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm hover:bg-amber-400 transition-all">
                 Request Audit
-                <ArrowUpRight size={16} />
+                <ArrowUpRight size={14} className="sm:w-4 sm:h-4" />
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
-              <h3 className="text-lg font-bold font-serif mb-6">Compendium Distribution</h3>
-              <div className="h-[200px]">
+            <div className="bg-white p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] shadow-sm border border-slate-100">
+              <h3 className="text-base sm:text-lg font-bold font-serif mb-4 sm:mb-6">Compendium Distribution</h3>
+              <div className="h-[180px] sm:h-[200px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie

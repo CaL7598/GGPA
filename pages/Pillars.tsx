@@ -2,19 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import GovernanceDashboard from '../components/GovernanceDashboard';
 import { Shield, BarChart3, GraduationCap, ArrowRight, CheckCircle, Target, Globe, Award, Users, Lightbulb, Trophy, Calendar } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
 
 const Pillars: React.FC = () => {
+  const { state } = useContent();
+  
   return (
     <div className="pb-24">
       {/* Hero Section */}
-      <div className="bg-slate-900 text-white py-24 mb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-20 text-white/5 pointer-events-none">
-          <Target size={400} />
+      <div className="bg-slate-900 text-white py-12 sm:py-16 lg:py-24 mb-12 sm:mb-16 lg:mb-20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 sm:p-12 lg:p-20 text-white/5 pointer-events-none">
+          <Target size={200} className="sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px]" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <h1 className="text-5xl font-bold font-serif mb-8">Pillars of Impact</h1>
-            <p className="text-xl text-slate-400 leading-relaxed">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif mb-4 sm:mb-6 lg:mb-8">Pillars of Impact</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 leading-relaxed">
               The "Action Tank" Services: Governance, Diplomacy, Research, Academy, and Partnerships. Five strategic pillars driving institutional transformation.
             </p>
           </div>
@@ -23,8 +26,8 @@ const Pillars: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* The Five Pillars Overview */}
-        <section className="mb-24">
-          <div className="grid md:grid-cols-5 gap-6 mb-16">
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-8 sm:mb-12 lg:mb-16">
             {[
               { name: 'Governance', icon: Shield, color: 'bg-slate-900' },
               { name: 'Diplomacy', icon: Globe, color: 'bg-amber-600' },
@@ -32,11 +35,11 @@ const Pillars: React.FC = () => {
               { name: 'Academy', icon: GraduationCap, color: 'bg-amber-500' },
               { name: 'Partnerships', icon: Award, color: 'bg-slate-600' }
             ].map((pillar) => (
-              <div key={pillar.name} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 text-center hover:shadow-xl transition-all">
-                <div className={`${pillar.color} p-4 rounded-xl w-16 h-16 mx-auto mb-4 flex items-center justify-center`}>
-                  <pillar.icon className="text-white" size={32} />
+              <div key={pillar.name} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 text-center hover:shadow-xl transition-all">
+                <div className={`${pillar.color} p-3 sm:p-4 rounded-lg sm:rounded-xl w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mx-auto mb-3 sm:mb-4 flex items-center justify-center`}>
+                  <pillar.icon className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
                 </div>
-                <h3 className="font-bold font-serif text-slate-900">{pillar.name}</h3>
+                <h3 className="text-sm sm:text-base font-bold font-serif text-slate-900">{pillar.name}</h3>
               </div>
             ))}
           </div>
@@ -45,7 +48,14 @@ const Pillars: React.FC = () => {
         {/* IIGRA Diagnostic */}
         <section className="mb-24">
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-[3rem] p-12 lg:p-20 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 text-white/5">
+            <div className="absolute inset-0 opacity-30">
+              <img 
+                src="https://img.freepik.com/free-photo/african-professionals-conducting-audit-meeting-boardroom_1150-10192.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_AUDIT_MEETING"
+                alt="Institutional audit"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute top-0 right-0 p-12 text-white/5 z-0">
               <Shield size={200} />
             </div>
             <div className="relative z-10 max-w-4xl">
@@ -121,6 +131,13 @@ const Pillars: React.FC = () => {
                 <p className="text-slate-700 text-lg leading-relaxed mb-8">
                   Certified training for the next generation of technical administrators. Our academy offers three professional certification tracks designed to build functional authority in governance, diplomacy, and digital transformation.
                 </p>
+                <div className="relative h-64 rounded-2xl overflow-hidden mb-8 lg:hidden">
+                  <img 
+                    src="https://img.freepik.com/free-photo/african-professionals-attending-training-workshop_1150-10193.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TRAINING"
+                    alt="Leadership Academy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="space-y-4">
                   {[
                     {
@@ -147,8 +164,15 @@ const Pillars: React.FC = () => {
                   <ArrowRight size={20} />
                 </button>
               </div>
-              <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-3xl p-12">
-                <div className="space-y-6">
+              <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-3xl p-12 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                  <img 
+                    src="https://img.freepik.com/free-photo/african-professionals-attending-training-workshop_1150-10193.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TRAINING"
+                    alt="Leadership Academy"
+                    className="w-full h-full object-cover hidden lg:block"
+                  />
+                </div>
+                <div className="space-y-6 relative z-10">
                   <div className="bg-white p-6 rounded-2xl shadow-sm">
                     <h4 className="font-bold text-slate-900 mb-4">Knowledge Exchange Forum</h4>
                     <p className="text-slate-600 text-sm leading-relaxed mb-4">
@@ -194,7 +218,14 @@ const Pillars: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Global Governance Forum */}
             <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-[2.5rem] p-8 lg:p-12 relative overflow-hidden group hover:shadow-2xl transition-all">
-              <div className="absolute top-0 right-0 p-8 text-white/5">
+              <div className="absolute inset-0 opacity-20">
+                <img 
+                  src={state.programs.globalGovernanceForum}
+                  alt="Global Governance Forum"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute top-0 right-0 p-8 text-white/5 z-0">
                 <Globe size={120} />
               </div>
               <div className="relative z-10">
@@ -227,7 +258,14 @@ const Pillars: React.FC = () => {
             </div>
 
             {/* Youth Governance Fellowship */}
-            <div className="bg-gradient-to-br from-amber-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-amber-100 group hover:shadow-2xl transition-all">
+            <div className="bg-gradient-to-br from-amber-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-amber-100 group hover:shadow-2xl transition-all overflow-hidden">
+              <div className="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden rounded-t-[2.5rem]">
+                <img 
+                  src={state.programs.youthGovernanceFellowship}
+                  alt="Youth Governance Fellowship"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <div className="bg-amber-100 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6">
                 <Users className="text-amber-600" size={32} />
               </div>
@@ -263,7 +301,14 @@ const Pillars: React.FC = () => {
             </div>
 
             {/* Public Policy Innovation Lab */}
-            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-slate-200 group hover:shadow-2xl transition-all">
+            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-slate-200 group hover:shadow-2xl transition-all overflow-hidden">
+              <div className="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden rounded-t-[2.5rem]">
+                <img 
+                  src={state.programs.publicPolicyInnovationLab}
+                  alt="Public Policy Innovation Lab"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <div className="bg-slate-900 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6">
                 <Lightbulb className="text-amber-400" size={32} />
               </div>

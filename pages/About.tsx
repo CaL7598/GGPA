@@ -9,14 +9,14 @@ const About: React.FC = () => {
   return (
     <div className="pb-24">
       {/* Hero Section */}
-      <div className="bg-slate-900 text-white py-24 mb-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-20 text-white/5 pointer-events-none">
-          <Shield size={400} />
+      <div className="bg-slate-900 text-white py-12 sm:py-16 lg:py-24 mb-12 sm:mb-16 lg:mb-20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 sm:p-12 lg:p-20 text-white/5 pointer-events-none">
+          <Shield size={200} className="sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px]" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <h1 className="text-5xl font-bold font-serif mb-8">The Secretariat</h1>
-            <p className="text-xl text-slate-400 leading-relaxed">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif mb-4 sm:mb-6 lg:mb-8">The Secretariat</h1>
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 leading-relaxed">
               Governance Structure, Act 992 Compliance, and Institutional Transparency. A world-class technical alliance architecting the future of global governance.
             </p>
           </div>
@@ -25,22 +25,22 @@ const About: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Founder Profile */}
-        <section className="mb-24">
-          <div className="bg-white rounded-[3rem] p-12 lg:p-20 shadow-sm border border-slate-100">
-            <div className="grid lg:grid-cols-3 gap-12 items-start">
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 lg:p-12 xl:p-20 shadow-sm border border-slate-100">
+            <div className="grid lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 items-start">
               <div className="lg:col-span-1">
                 <img 
                   src={founderImage} 
                   alt={state.founder.name}
-                  className="w-full rounded-3xl shadow-xl mb-6 object-cover"
+                  className="w-full rounded-2xl sm:rounded-3xl shadow-xl mb-4 sm:mb-6 object-cover"
                 />
                 <div className="text-center lg:text-left">
-                  <h3 className="text-2xl font-bold font-serif mb-2">{state.founder.name}</h3>
-                  <p className="text-slate-600 font-medium mb-4">{state.founder.title}</p>
+                  <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2">{state.founder.name}</h3>
+                  <p className="text-sm sm:text-base text-slate-600 font-medium mb-3 sm:mb-4">{state.founder.title}</p>
                   <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                    <span className="px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold">Founder & CEO</span>
-                    <span className="px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold">Commonwealth DSG Nominee</span>
-                    <span className="px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold">Researcher (IR)</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Founder & CEO</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Commonwealth DSG Nominee</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Researcher (IR)</span>
                   </div>
                 </div>
               </div>
@@ -100,38 +100,59 @@ const About: React.FC = () => {
         </section>
 
         {/* Executive Council */}
-        <section className="mb-24">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold font-serif mb-4">The Executive Council</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-3 sm:mb-4">The Executive Council</h2>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto px-4">
               The leadership structure ensuring Act 992 compliance, diplomatic excellence, and research integrity.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-              <div className="bg-slate-900 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6">
-                <FileText className="text-amber-400" size={32} />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group">
+              <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/confident-african-lawyer-professional-suit-standing-courtroom_1150-10182.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_LEGAL_PROFESSIONAL"
+                  alt="The Registrar"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
-              <h3 className="text-2xl font-bold font-serif mb-3">The Registrar</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <div className="bg-slate-900 p-3 sm:p-4 rounded-xl sm:rounded-2xl w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center mb-4 sm:mb-6">
+                <FileText className="text-amber-400 w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2 sm:mb-3">The Registrar</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 Responsible for Act 992 compliance and legal filings. Ensures all institutional operations meet the highest standards of transparency and regulatory adherence.
               </p>
             </div>
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-              <div className="bg-slate-900 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6">
-                <Globe className="text-amber-400" size={32} />
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group">
+              <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/african-diplomat-professional-meeting-international-conference_1150-10183.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_DIPLOMAT"
+                  alt="Chief of Protocols"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
-              <h3 className="text-2xl font-bold font-serif mb-3">Chief of Protocols</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <div className="bg-slate-900 p-3 sm:p-4 rounded-xl sm:rounded-2xl w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center mb-4 sm:mb-6">
+                <Globe className="text-amber-400 w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2 sm:mb-3">Chief of Protocols</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 Managing diplomatic relations with the AU and Commonwealth. Coordinates multi-lateral engagements and ensures protocol excellence.
               </p>
             </div>
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-              <div className="bg-slate-900 p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6">
-                <BookOpen className="text-amber-400" size={32} />
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group sm:col-span-2 lg:col-span-1">
+              <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/african-researcher-professional-analyzing-data-laboratory_1150-10184.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_RESEARCHER"
+                  alt="Director of Research"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
-              <h3 className="text-2xl font-bold font-serif mb-3">Director of Research</h3>
-              <p className="text-slate-600 leading-relaxed">
+              <div className="bg-slate-900 p-3 sm:p-4 rounded-xl sm:rounded-2xl w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 flex items-center justify-center mb-4 sm:mb-6">
+                <BookOpen className="text-amber-400 w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2 sm:mb-3">Director of Research</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                 Oversight of the Governance Index data. Leads research initiatives and maintains the scientific rigor of our 5,000-page framework.
               </p>
             </div>
@@ -147,7 +168,14 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
+              <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/young-african-professional-lawyer-studying-legal-documents_1150-10185.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_YOUTH_LEGAL"
+                  alt="Legal Harmony Track"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="bg-amber-100 p-3 rounded-xl">
                   <Shield className="text-amber-600" size={24} />
@@ -161,7 +189,14 @@ const About: React.FC = () => {
                 Specializing in international legal frameworks, treaty negotiation, and Act 992 compliance. Leading the development of Volumes I-VIII of the Compendium.
               </p>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
+              <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/african-professional-accountant-analyzing-financial-data_1150-10186.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_ECONOMIST"
+                  alt="Economic Integrity Track"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="bg-amber-100 p-3 rounded-xl">
                   <Briefcase className="text-amber-600" size={24} />
@@ -175,7 +210,14 @@ const About: React.FC = () => {
                 Expert in IPSAS/IFRS standards, fiduciary transparency, and economic governance. Overseeing the technical frameworks for financial accountability.
               </p>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+            <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
+              <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
+                <img 
+                  src="https://img.freepik.com/free-photo/young-african-tech-professional-working-laptop-modern-office_1150-10187.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TECH_PROFESSIONAL"
+                  alt="Digital Sovereignty Track"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center gap-4 mb-6">
                 <div className="bg-amber-100 p-3 rounded-xl">
                   <Award className="text-amber-600" size={24} />
