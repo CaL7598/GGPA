@@ -27,7 +27,7 @@ const DEFAULT_STATE: AppState = {
   },
   founder: {
     quote: "We are moving the conversation from 'asking for inclusion' to 'providing technical solutions.' Functional Authority is the end of tokenism and the beginning of the Technical Elite.",
-    name: "Dr. David Sekyi Yirenkyi",
+    name: "David Sekyi Yirenkyi",
     title: "Founder & Executive Director, Researcher in IR",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
   },

@@ -202,7 +202,7 @@ INSERT INTO hero (id, headline, subHeadline, image) VALUES (
 INSERT INTO founder (id, quote, name, title, image) VALUES (
   1,
   'We are moving the conversation from ''asking for inclusion'' to ''providing technical solutions.'' Functional Authority is the end of tokenism and the beginning of the Technical Elite.',
-  'Dr. David Sekyi Yirenkyi',
+  'David Sekyi Yirenkyi',
   'Founder & Executive Director, Researcher in IR',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200'
 ) ON CONFLICT (id) DO NOTHING;

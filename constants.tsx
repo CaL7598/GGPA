@@ -55,7 +55,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     category: 'Editorial',
     title: 'Beyond Advocacy: The Case for Functional Authority',
     date: 'February 10, 2026',
-    author: 'Dr. David Sekyi Yirenkyi',
+    author: 'David Sekyi Yirenkyi',
     excerpt: 'At GGPA, we argue that a seat is insufficient without a blueprint. Functional Authority means youth leaders aren\'t just observers—they are auditors.',
     content: `At GGPA, we argue that a seat is insufficient without a blueprint. Functional Authority means youth leaders aren't just observers—they are auditors.
 
