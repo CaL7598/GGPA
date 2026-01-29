@@ -1,7 +1,13 @@
 import React from 'react';
-import { Shield, Users, BookOpen, Award, Briefcase, GraduationCap, Globe, FileText } from 'lucide-react';
+import { Shield, Users, BookOpen, Award, Briefcase, GraduationCap, Globe, FileText, Target, Eye, Scale } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import founderImage from '../assets/founder/WhatsApp Image 2026-01-29 at 09.51.13.jpeg';
+import legalImage from '../assets/images/supreme_court.jpeg';
+import diplomatImage from '../assets/images/au-summit-in-addis-ababa-2-scaled.jpg';
+import researchImage from '../assets/images/20251003_hq-drone-photos_0006.webp';
+import youthLegalImage from '../assets/images/SUPREME-COURT-2-233LEGAL-1.webp';
+import youthEconomicImage from '../assets/images/flickr_24757651797_bfa40e7b50_k_GovernmentZA-e1539695449767.jpg';
+import youthTechImage from '../assets/images/395b735280084368b715bf3edf7fdfdf.png';
 
 const About: React.FC = () => {
   const { state } = useContent();
@@ -111,7 +117,7 @@ const About: React.FC = () => {
             <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group">
               <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/confident-african-lawyer-professional-suit-standing-courtroom_1150-10182.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_LEGAL_PROFESSIONAL"
+                  src={legalImage}
                   alt="The Registrar"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -127,7 +133,7 @@ const About: React.FC = () => {
             <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group">
               <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/african-diplomat-professional-meeting-international-conference_1150-10183.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_DIPLOMAT"
+                  src={diplomatImage}
                   alt="Chief of Protocols"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -143,7 +149,7 @@ const About: React.FC = () => {
             <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 overflow-hidden group sm:col-span-2 lg:col-span-1">
               <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/african-researcher-professional-analyzing-data-laboratory_1150-10184.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_RESEARCHER"
+                  src={researchImage}
                   alt="Director of Research"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -171,7 +177,7 @@ const About: React.FC = () => {
             <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
               <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/young-african-professional-lawyer-studying-legal-documents_1150-10185.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_YOUTH_LEGAL"
+                  src={youthLegalImage}
                   alt="Legal Harmony Track"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -192,7 +198,7 @@ const About: React.FC = () => {
             <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
               <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/african-professional-accountant-analyzing-financial-data_1150-10186.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_ECONOMIST"
+                  src={youthEconomicImage}
                   alt="Economic Integrity Track"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -213,7 +219,7 @@ const About: React.FC = () => {
             <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 overflow-hidden group">
               <div className="relative -mx-8 -mt-8 mb-6 h-40 overflow-hidden">
                 <img 
-                  src="https://img.freepik.com/free-photo/young-african-tech-professional-working-laptop-modern-office_1150-10187.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TECH_PROFESSIONAL"
+                  src={youthTechImage}
                   alt="Digital Sovereignty Track"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -229,6 +235,45 @@ const About: React.FC = () => {
               </div>
               <p className="text-slate-700 leading-relaxed">
                 Leading e-governance architecture, data ethics (Act 843), and cyber sovereignty initiatives. Architecting the digital infrastructure for transparent governance.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Competitive Advantage */}
+        <section className="mb-12 sm:mb-16 lg:mb-24">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif mb-3 sm:mb-4">THE GGPA "COMPETITIVE ADVANTAGE"</h2>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto px-4">
+              What sets us apart in the governance landscape
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+              <div className="bg-amber-100 p-4 sm:p-5 rounded-xl sm:rounded-2xl w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 flex items-center justify-center mb-4 sm:mb-6">
+                <Users className="text-amber-600 w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-3 sm:mb-4">In-Situ Fellowships</h3>
+              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                Unlike other NGOs, GGPA embeds "Youth Governance Fellows" directly inside government Ministries (MDAs) to provide technical support.
+              </p>
+            </div>
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+              <div className="bg-amber-100 p-4 sm:p-5 rounded-xl sm:rounded-2xl w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 flex items-center justify-center mb-4 sm:mb-6">
+                <Eye className="text-amber-600 w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-3 sm:mb-4">De Facto Monitoring</h3>
+              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                We measure governance not by the laws on paper, but by the actual experience of citizens and youth on the ground.
+              </p>
+            </div>
+            <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+              <div className="bg-amber-100 p-4 sm:p-5 rounded-xl sm:rounded-2xl w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 flex items-center justify-center mb-4 sm:mb-6">
+                <Scale className="text-amber-600 w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-3 sm:mb-4">Legal Transparency</h3>
+              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+                We are registered under the Ghana Companies Act, 2019 (Act 992) and maintain a "Public Disclosure" policy regarding our board and senior management remuneration.
               </p>
             </div>
           </div>

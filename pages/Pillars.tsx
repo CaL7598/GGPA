@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import GovernanceDashboard from '../components/GovernanceDashboard';
 import { Shield, BarChart3, GraduationCap, ArrowRight, CheckCircle, Target, Globe, Award, Users, Lightbulb, Trophy, Calendar } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import forumImage from '../assets/images/au-summit-in-addis-ababa-2-scaled.jpg';
+import fellowshipImage from '../assets/images/meeting-at-ecowas-wahpscon.jpg';
+import innovationImage from '../assets/images/20251003_hq-drone-photos_0006.webp';
+import awardImage from '../assets/images/flickr_24757651797_bfa40e7b50_k_GovernmentZA-e1539695449767.jpg';
+import auditImage from '../assets/images/shutterstock_2487493763-1024x683.jpg';
+import trainingImage from '../assets/images/0822POM.jpg';
 
 const Pillars: React.FC = () => {
   const { state } = useContent();
@@ -50,7 +56,7 @@ const Pillars: React.FC = () => {
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-[3rem] p-12 lg:p-20 relative overflow-hidden">
             <div className="absolute inset-0 opacity-30">
               <img 
-                src="https://img.freepik.com/free-photo/african-professionals-conducting-audit-meeting-boardroom_1150-10192.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_AUDIT_MEETING"
+                src={auditImage}
                 alt="Institutional audit"
                 className="w-full h-full object-cover"
               />
@@ -133,7 +139,7 @@ const Pillars: React.FC = () => {
                 </p>
                 <div className="relative h-64 rounded-2xl overflow-hidden mb-8 lg:hidden">
                   <img 
-                    src="https://img.freepik.com/free-photo/african-professionals-attending-training-workshop_1150-10193.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TRAINING"
+                    src={trainingImage}
                     alt="Leadership Academy"
                     className="w-full h-full object-cover"
                   />
@@ -167,7 +173,7 @@ const Pillars: React.FC = () => {
               <div className="bg-gradient-to-br from-amber-50 to-slate-50 rounded-3xl p-12 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
                   <img 
-                    src="https://img.freepik.com/free-photo/african-professionals-attending-training-workshop_1150-10193.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TRAINING"
+                    src={trainingImage}
                     alt="Leadership Academy"
                     className="w-full h-full object-cover hidden lg:block"
                   />
@@ -220,7 +226,7 @@ const Pillars: React.FC = () => {
             <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-[2.5rem] p-8 lg:p-12 relative overflow-hidden group hover:shadow-2xl transition-all">
               <div className="absolute inset-0 opacity-20">
                 <img 
-                  src={state.programs.globalGovernanceForum}
+                  src={forumImage}
                   alt="Global Governance Forum"
                   className="w-full h-full object-cover"
                 />
@@ -261,7 +267,7 @@ const Pillars: React.FC = () => {
             <div className="bg-gradient-to-br from-amber-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-amber-100 group hover:shadow-2xl transition-all overflow-hidden">
               <div className="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden rounded-t-[2.5rem]">
                 <img 
-                  src={state.programs.youthGovernanceFellowship}
+                  src={fellowshipImage}
                   alt="Youth Governance Fellowship"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -304,7 +310,7 @@ const Pillars: React.FC = () => {
             <div className="bg-gradient-to-br from-slate-50 to-white rounded-[2.5rem] p-8 lg:p-12 border-2 border-slate-200 group hover:shadow-2xl transition-all overflow-hidden">
               <div className="relative -mx-8 -mt-8 mb-6 h-48 overflow-hidden rounded-t-[2.5rem]">
                 <img 
-                  src={state.programs.publicPolicyInnovationLab}
+                  src={innovationImage}
                   alt="Public Policy Innovation Lab"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -342,7 +348,14 @@ const Pillars: React.FC = () => {
 
             {/* Governance Excellence Award */}
             <div className="bg-gradient-to-br from-amber-600 to-amber-700 text-white rounded-[2.5rem] p-8 lg:p-12 relative overflow-hidden group hover:shadow-2xl transition-all">
-              <div className="absolute top-0 right-0 p-8 text-white/10">
+              <div className="absolute inset-0 opacity-20">
+                <img 
+                  src={awardImage}
+                  alt="Governance Excellence Award"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute top-0 right-0 p-8 text-white/10 z-0">
                 <Trophy size={120} />
               </div>
               <div className="relative z-10">

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Users, Award, FileText, CheckCircle, ArrowRight, Lock, BookOpen, Target } from 'lucide-react';
+import teamImage from '../assets/images/meeting-at-ecowas-wahpscon.jpg';
+import legalTrackImage from '../assets/images/supreme_court.jpeg';
+import economicTrackImage from '../assets/images/flickr_24757651797_bfa40e7b50_k_GovernmentZA-e1539695449767.jpg';
+import techTrackImage from '../assets/images/395b735280084368b715bf3edf7fdfdf.png';
 
 const Fellowship: React.FC = () => {
   const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
@@ -35,7 +39,7 @@ const Fellowship: React.FC = () => {
       <div className="bg-slate-900 text-white py-12 sm:py-16 lg:py-24 mb-12 sm:mb-16 lg:mb-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img 
-            src="https://img.freepik.com/free-photo/diverse-african-professionals-working-together-modern-office_1150-10188.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TEAM_DIVERSITY"
+            src={teamImage}
             alt="African professionals"
             className="w-full h-full object-cover"
           />
@@ -106,7 +110,9 @@ const Fellowship: React.FC = () => {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {tracks.map((track, index) => (
+            {tracks.map((track, index) => {
+              const trackImages = [legalTrackImage, economicTrackImage, techTrackImage];
+              return (
               <div 
                 key={track.id}
                 className={`bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border-2 transition-all cursor-pointer overflow-hidden ${
@@ -118,12 +124,7 @@ const Fellowship: React.FC = () => {
               >
                 <div className="relative -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-4 sm:mb-6 h-40 sm:h-48 overflow-hidden">
                   <img 
-                    src={index === 0 
-                      ? "https://img.freepik.com/free-photo/young-african-professional-lawyer-legal-documents_1150-10189.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_LEGAL_TRACK"
-                      : index === 1
-                      ? "https://img.freepik.com/free-photo/african-professional-accountant-analyzing-financial-reports_1150-10190.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_ECONOMIC_TRACK"
-                      : "https://img.freepik.com/free-photo/young-african-tech-professional-coding-laptop_1150-10191.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_DIGITAL_TRACK"
-                    }
+                    src={trackImages[index]}
                     alt={track.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -169,7 +170,8 @@ const Fellowship: React.FC = () => {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 

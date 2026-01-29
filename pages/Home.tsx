@@ -7,6 +7,10 @@ import DeepSearch from '../components/DeepSearch';
 import { useContent } from '../context/ContentContext';
 import { Star, ArrowRight } from 'lucide-react';
 import founderImage from '../assets/founder/WhatsApp Image 2026-01-29 at 09.51.13.jpeg';
+import teamImage from '../assets/images/meeting-at-ecowas-wahpscon.jpg';
+import ungaImage from '../assets/images/unga-wrap-up.webp';
+import auSummitImage from '../assets/images/au-summit-in-addis-ababa-2-scaled.jpg';
+import governmentImage from '../assets/images/flickr_24757651797_bfa40e7b50_k_GovernmentZA-e1539695449767.jpg';
 
 const Home: React.FC = () => {
   const { state } = useContent();
@@ -19,7 +23,7 @@ const Home: React.FC = () => {
       <div className="bg-slate-900 py-8 sm:py-12 relative z-20 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <img 
-            src="https://img.freepik.com/free-photo/african-professionals-working-together-modern-office_1150-10179.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_TEAM_COLLABORATION" 
+            src={teamImage}
             alt="African professionals" 
             className="w-full h-full object-cover"
           />
@@ -46,7 +50,7 @@ const Home: React.FC = () => {
             
             <div className="max-w-3xl relative z-10">
               <h4 className="text-amber-600 font-bold text-xs sm:text-sm tracking-widest uppercase mb-4 sm:mb-6">Founder's Welcome</h4>
-              <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 sm:mb-8 lg:mb-10 leading-tight">
+              <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 sm:mb-8 lg:mb-10 leading-tight italic">
                 "{state.founder.quote}"
               </blockquote>
               <div className="flex items-center gap-3 sm:gap-4">
@@ -80,29 +84,24 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {state.news.map((item, index) => (
+            {state.news.map((item, index) => {
+              // Map news items to appropriate images
+              const newsImages = [ungaImage, auSummitImage, governmentImage];
+              const newsImage = item.image || newsImages[index % newsImages.length];
+              
+              return (
               <Link 
                 key={item.id} 
                 to={`/news/${item.id}`}
                 className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all group flex flex-col h-full overflow-hidden"
               >
-                {item.image ? (
-                  <div className="mb-4 sm:mb-6 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 rounded-t-[1.5rem] sm:rounded-t-[2rem] overflow-hidden">
-                    <img 
-                      src={item.image} 
-                      alt={item.title}
-                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                ) : (
-                  <div className="mb-4 sm:mb-6 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 rounded-t-[1.5rem] sm:rounded-t-[2rem] overflow-hidden h-40 sm:h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                    <img 
-                      src={`https://img.freepik.com/free-photo/african-professional-presenting-data-meeting_1150-10181.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_PROFESSIONAL_${index}`}
-                      alt={item.title}
-                      className="w-full h-full object-cover opacity-50"
-                    />
-                  </div>
-                )}
+                <div className="mb-4 sm:mb-6 -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 rounded-t-[1.5rem] sm:rounded-t-[2rem] overflow-hidden">
+                  <img 
+                    src={newsImage} 
+                    alt={item.title}
+                    className="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
                 <div className="mb-4 sm:mb-6">
                   <span className="px-2 sm:px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
                     {item.category}
@@ -117,7 +116,8 @@ const Home: React.FC = () => {
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

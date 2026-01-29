@@ -59,6 +59,19 @@ export interface Programs {
   governanceExcellenceAward: string;
 }
 
+export interface NavLink {
+  name: string;
+  href: string;
+}
+
+export interface FooterContent {
+  description: string;
+  governanceLinks: { label: string; href: string }[];
+  footerLinks: { label: string; href: string }[];
+  copyright: string;
+  socialLinks: { type: string; href: string }[];
+}
+
 export interface AppState {
   hero: {
     headline: string;
@@ -77,4 +90,6 @@ export interface AppState {
   gallery: GalleryImage[];
   contact: ContactInfo;
   programs: Programs;
+  navigation: NavLink[];
+  footer: FooterContent;
 }

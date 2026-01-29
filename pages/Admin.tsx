@@ -11,8 +11,8 @@ import { supabase } from '../lib/supabase';
 const Admin: React.FC = () => {
   const { user, loading: authLoading, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, updatePrograms, resetToDefault } = useContent();
-  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs'>('content');
+  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, updatePrograms, updateStats, updateCompendium, updateNavigation, updateFooter, resetToDefault } = useContent();
+  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs' | 'stats' | 'compendium' | 'navigation' | 'footer'>('content');
   const [saveStatus, setSaveStatus] = useState(false);
 
   useEffect(() => {
@@ -127,13 +127,17 @@ const Admin: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex bg-white p-1 rounded-2xl border border-slate-200 mb-8 max-w-2xl overflow-x-auto">
+        <div className="flex bg-white p-1 rounded-2xl border border-slate-200 mb-8 max-w-4xl overflow-x-auto">
           {[
             { id: 'content', icon: <Type size={18} />, label: 'Page Content' },
             { id: 'news', icon: <FileText size={18} />, label: 'GGPA News' },
             { id: 'gallery', icon: <Image size={18} />, label: 'Media Vault' },
             { id: 'contact', icon: <Phone size={18} />, label: 'Contact Info' },
             { id: 'programs', icon: <LayoutDashboard size={18} />, label: 'Programs' },
+            { id: 'stats', icon: <LayoutDashboard size={18} />, label: 'Impact Stats' },
+            { id: 'compendium', icon: <FileText size={18} />, label: 'Compendium' },
+            { id: 'navigation', icon: <LayoutDashboard size={18} />, label: 'Navigation' },
+            { id: 'footer', icon: <LayoutDashboard size={18} />, label: 'Footer' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -214,6 +218,16 @@ const Admin: React.FC = () => {
                         onChange={(e) => updateFounder({ ...state.founder, title: e.target.value })}
                         className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
                       />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Founder Image</label>
+                    <div className="relative group rounded-2xl overflow-hidden border border-slate-200 h-48 bg-slate-100 max-w-md">
+                      <img src={state.founder.image} className="w-full h-full object-cover" alt="Founder" />
+                      <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'founder')} />
+                        <span className="text-white font-bold text-sm underline">Change Image</span>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -477,6 +491,304 @@ const Admin: React.FC = () => {
                   </div>
                 </div>
               </section>
+            </div>
+          )}
+
+          {activeTab === 'stats' && (
+            <div className="space-y-8 animate-in slide-in-from-right duration-500">
+              <div>
+                <h3 className="text-xl font-bold font-serif mb-6">Impact Statistics</h3>
+                <p className="text-sm text-slate-600 mb-6">Manage the statistics displayed in the stats bar on the homepage.</p>
+                
+                <div className="space-y-4">
+                  {state.stats.map((stat, index) => (
+                    <div key={stat.id} className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Value</label>
+                          <input 
+                            type="text" 
+                            value={stat.value}
+                            onChange={(e) => {
+                              const newStats = [...state.stats];
+                              newStats[index] = { ...stat, value: e.target.value };
+                              updateStats(newStats);
+                            }}
+                            className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-bold text-2xl"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Label</label>
+                          <input 
+                            type="text" 
+                            value={stat.label}
+                            onChange={(e) => {
+                              const newStats = [...state.stats];
+                              newStats[index] = { ...stat, label: e.target.value };
+                              updateStats(newStats);
+                            }}
+                            className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'compendium' && (
+            <div className="space-y-8 animate-in slide-in-from-right duration-500">
+              <div>
+                <h3 className="text-xl font-bold font-serif mb-6">Compendium Volumes</h3>
+                <p className="text-sm text-slate-600 mb-6">Manage the 30-volume Compendium structure and categories.</p>
+                
+                <div className="space-y-6">
+                  {state.compendium.map((category, categoryIndex) => (
+                    <div key={category.id} className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                      <div className="mb-4">
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Category Name</label>
+                        <input 
+                          type="text" 
+                          value={category.name}
+                          onChange={(e) => {
+                            const newCompendium = [...state.compendium];
+                            newCompendium[categoryIndex] = { ...category, name: e.target.value };
+                            updateCompendium(newCompendium);
+                          }}
+                          className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-bold"
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description</label>
+                        <textarea 
+                          rows={2}
+                          value={category.description}
+                          onChange={(e) => {
+                            const newCompendium = [...state.compendium];
+                            newCompendium[categoryIndex] = { ...category, description: e.target.value };
+                            updateCompendium(newCompendium);
+                          }}
+                          className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Volumes</label>
+                        <input 
+                          type="text" 
+                          value={category.volumes}
+                          onChange={(e) => {
+                            const newCompendium = [...state.compendium];
+                            newCompendium[categoryIndex] = { ...category, volumes: e.target.value };
+                            updateCompendium(newCompendium);
+                          }}
+                          className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                          placeholder="e.g., Vols I-VIII"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'navigation' && (
+            <div className="space-y-8 animate-in slide-in-from-right duration-500">
+              <div>
+                <h3 className="text-xl font-bold font-serif mb-6">Navigation Menu</h3>
+                <p className="text-sm text-slate-600 mb-6">Manage the navigation links displayed in the header.</p>
+                
+                <div className="space-y-4">
+                  {(state.navigation || []).map((link, index) => (
+                    <div key={index} className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Link Name</label>
+                          <input 
+                            type="text" 
+                            value={link.name}
+                            onChange={(e) => {
+                              const newNav = [...state.navigation];
+                              newNav[index] = { ...link, name: e.target.value };
+                              updateNavigation(newNav);
+                            }}
+                            className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Link URL</label>
+                          <input 
+                            type="text" 
+                            value={link.href}
+                            onChange={(e) => {
+                              const newNav = [...state.navigation];
+                              newNav[index] = { ...link, href: e.target.value };
+                              updateNavigation(newNav);
+                            }}
+                            className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                            placeholder="#/page"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const newNav = state.navigation.filter((_, i) => i !== index);
+                          updateNavigation(newNav);
+                        }}
+                        className="mt-4 text-red-600 hover:text-red-700 text-xs font-bold flex items-center gap-1"
+                      >
+                        <Trash2 size={14} /> Delete Link
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      const newNav = [...state.navigation, { name: 'New Link', href: '#/' }];
+                      updateNavigation(newNav);
+                    }}
+                    className="w-full p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl text-amber-700 font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Plus size={18} /> Add Navigation Link
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'footer' && (
+            <div className="space-y-8 animate-in slide-in-from-right duration-500">
+              <div>
+                <h3 className="text-xl font-bold font-serif mb-6">Footer Content</h3>
+                <p className="text-sm text-slate-600 mb-6">Manage all footer content including description, links, and copyright.</p>
+                
+                <div className="space-y-6">
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Footer Description</label>
+                    <textarea 
+                      rows={3}
+                      value={state.footer?.description || ''}
+                      onChange={(e) => updateFooter({ ...state.footer, description: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                    />
+                  </div>
+
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Governance Links</label>
+                    <div className="space-y-4">
+                      {state.footer?.governanceLinks?.map((link, index) => (
+                        <div key={index} className="grid md:grid-cols-2 gap-4">
+                          <input 
+                            type="text" 
+                            value={link.label}
+                            onChange={(e) => {
+                              const newLinks = [...(state.footer?.governanceLinks || [])];
+                              newLinks[index] = { ...link, label: e.target.value };
+                              updateFooter({ ...state.footer, governanceLinks: newLinks } as any);
+                            }}
+                            className="p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                            placeholder="Link Label"
+                          />
+                          <div className="flex gap-2">
+                            <input 
+                              type="text" 
+                              value={link.href}
+                              onChange={(e) => {
+                                const newLinks = [...(state.footer?.governanceLinks || [])];
+                                newLinks[index] = { ...link, href: e.target.value };
+                                updateFooter({ ...state.footer, governanceLinks: newLinks } as any);
+                              }}
+                              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                              placeholder="#"
+                            />
+                            <button
+                              onClick={() => {
+                                const newLinks = (state.footer?.governanceLinks || []).filter((_, i) => i !== index);
+                                updateFooter({ ...state.footer, governanceLinks: newLinks } as any);
+                              }}
+                              className="p-3 text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => {
+                          const newLinks = [...(state.footer?.governanceLinks || []), { label: 'New Link', href: '#' }];
+                          updateFooter({ ...state.footer, governanceLinks: newLinks } as any);
+                        }}
+                        className="w-full p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-700 font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 text-xs"
+                      >
+                        <Plus size={14} /> Add Governance Link
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Footer Links (Privacy, Data Ethics, etc.)</label>
+                    <div className="space-y-4">
+                      {state.footer?.footerLinks?.map((link, index) => (
+                        <div key={index} className="grid md:grid-cols-2 gap-4">
+                          <input 
+                            type="text" 
+                            value={link.label}
+                            onChange={(e) => {
+                              const newLinks = [...(state.footer?.footerLinks || [])];
+                              newLinks[index] = { ...link, label: e.target.value };
+                              updateFooter({ ...state.footer, footerLinks: newLinks } as any);
+                            }}
+                            className="p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                            placeholder="Link Label"
+                          />
+                          <div className="flex gap-2">
+                            <input 
+                              type="text" 
+                              value={link.href}
+                              onChange={(e) => {
+                                const newLinks = [...(state.footer?.footerLinks || [])];
+                                newLinks[index] = { ...link, href: e.target.value };
+                                updateFooter({ ...state.footer, footerLinks: newLinks } as any);
+                              }}
+                              className="flex-1 p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                              placeholder="#"
+                            />
+                            <button
+                              onClick={() => {
+                                const newLinks = (state.footer?.footerLinks || []).filter((_, i) => i !== index);
+                                updateFooter({ ...state.footer, footerLinks: newLinks } as any);
+                              }}
+                              className="p-3 text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => {
+                          const newLinks = [...(state.footer?.footerLinks || []), { label: 'New Link', href: '#' }];
+                          updateFooter({ ...state.footer, footerLinks: newLinks } as any);
+                        }}
+                        className="w-full p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-700 font-bold hover:bg-amber-100 transition-colors flex items-center justify-center gap-2 text-xs"
+                      >
+                        <Plus size={14} /> Add Footer Link
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Copyright Text</label>
+                    <input 
+                      type="text" 
+                      value={state.footer?.copyright || ''}
+                      onChange={(e) => updateFooter({ ...state.footer, copyright: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>

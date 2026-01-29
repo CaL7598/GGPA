@@ -1,9 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AppState, NewsItem, Stats, VolumeCategory, GalleryImage, ContactInfo, Programs } from '../types';
-import { IMPACT_STATS, NEWS_ITEMS, VOLUME_CATEGORIES } from '../constants';
+import { AppState, NewsItem, Stats, VolumeCategory, GalleryImage, ContactInfo, Programs, NavLink, FooterContent } from '../types';
+import { IMPACT_STATS, NEWS_ITEMS, VOLUME_CATEGORIES, NAV_LINKS } from '../constants';
 import { supabaseService } from '../lib/supabaseService';
-import { supabase } from '../lib/supabase';
 
 interface ContentContextType {
   state: AppState;
@@ -53,10 +52,30 @@ const DEFAULT_STATE: AppState = {
     yacEmail: 'yac@ggpa-global.org',
   },
   programs: {
-    globalGovernanceForum: 'https://img.freepik.com/free-photo/african-diplomats-international-conference-meeting_1150-10194.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_CONFERENCE',
-    youthGovernanceFellowship: 'https://img.freepik.com/free-photo/young-african-professionals-learning-working-together_1150-10195.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_YOUTH_FELLOWSHIP',
-    publicPolicyInnovationLab: 'https://img.freepik.com/free-photo/african-researchers-innovators-working-together-lab_1150-10196.jpg?w=800&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_INNOVATION_LAB',
-    governanceExcellenceAward: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800',
+    globalGovernanceForum: '',
+    youthGovernanceFellowship: '',
+    publicPolicyInnovationLab: '',
+    governanceExcellenceAward: '',
+  },
+  navigation: NAV_LINKS,
+  footer: {
+    description: 'A world-class technical alliance architecting the future of global governance through scientific policy and youth-led functional authority.',
+    governanceLinks: [
+      { label: 'Ghana Act 992 Compliance', href: '#' },
+      { label: 'IPSAS Standards', href: '#' },
+      { label: 'GDPR & Data Ethics', href: '#' },
+      { label: 'Secretariat Structure', href: '#' },
+    ],
+    footerLinks: [
+      { label: 'Privacy Policy', href: '#' },
+      { label: 'Data Ethics', href: '#' },
+      { label: 'Press Room', href: '#' },
+    ],
+    copyright: '© 2026 GGPA. Registered entity under Ghana Companies Act, 2019 (Act 992). All Rights Reserved.',
+    socialLinks: [
+      { type: 'website', href: '#' },
+      { type: 'email', href: '#' },
+    ],
   },
 };
 
@@ -64,7 +83,9 @@ const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 // Check if Supabase is configured
 const isSupabaseConfigured = () => {
-  return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
+  const url = import.meta.env.VITE_SUPABASE_URL || '';
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+  return !!(url && key && url !== 'https://placeholder.supabase.co');
 };
 
 export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -75,6 +96,17 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     const loadData = async () => {
       try {
+        // Always load navigation and footer from localStorage (they're not in Supabase)
+        const saved = localStorage.getItem('ggpa_content_state');
+        let savedNav = DEFAULT_STATE.navigation;
+        let savedFooter = DEFAULT_STATE.footer;
+        
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.navigation) savedNav = parsed.navigation;
+          if (parsed.footer) savedFooter = parsed.footer;
+        }
+
         if (isSupabaseConfigured()) {
           // Load from Supabase
           const [hero, founder, news, programs, contact, gallery] = await Promise.all([
@@ -94,6 +126,8 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
             programs: programs || prev.programs,
             contact: contact || prev.contact,
             gallery: gallery.length > 0 ? gallery : prev.gallery,
+            navigation: savedNav,
+            footer: savedFooter,
           }));
         } else {
           // Fallback to localStorage
@@ -102,6 +136,8 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
             const parsed = JSON.parse(saved);
             if (!parsed.contact) parsed.contact = DEFAULT_STATE.contact;
             if (!parsed.programs) parsed.programs = DEFAULT_STATE.programs;
+            if (!parsed.navigation) parsed.navigation = DEFAULT_STATE.navigation;
+            if (!parsed.footer) parsed.footer = DEFAULT_STATE.footer;
             setState(parsed);
           }
         }
@@ -113,6 +149,8 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
           const parsed = JSON.parse(saved);
           if (!parsed.contact) parsed.contact = DEFAULT_STATE.contact;
           if (!parsed.programs) parsed.programs = DEFAULT_STATE.programs;
+          if (!parsed.navigation) parsed.navigation = DEFAULT_STATE.navigation;
+          if (!parsed.footer) parsed.footer = DEFAULT_STATE.footer;
           setState(parsed);
         }
       } finally {
@@ -240,12 +278,19 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const updateNavigation = (navigation: NavLink[]) => setState(prev => ({ ...prev, navigation }));
+  
+  const updateFooter = (footer: FooterContent) => setState(prev => ({ ...prev, footer }));
+
   const resetToDefault = () => setState(DEFAULT_STATE);
 
+  // Always render the provider, even during loading
+  // The context value is always available, just state might be loading
   return (
     <ContentContext.Provider value={{ 
       state, updateHero, updateFounder, addNews, deleteNews, 
-      updateStats, addGalleryImage, deleteGalleryImage, updateCompendium, updateContact, updatePrograms, resetToDefault 
+      updateStats, addGalleryImage, deleteGalleryImage, updateCompendium, updateContact, updatePrograms, 
+      updateNavigation, updateFooter, resetToDefault 
     }}>
       {children}
     </ContentContext.Provider>

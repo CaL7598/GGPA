@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Mail, Lock, AlertCircle } from 'lucide-react';
+import logoImage from '../assets/Logo/logo.png';
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -32,8 +33,12 @@ const AdminLogin: React.FC = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center mb-6">
-            <div className="bg-slate-900 p-4 rounded-2xl">
-              <ShieldCheck className="text-amber-400" size={48} />
+            <div className="bg-white p-4 rounded-2xl shadow-lg border border-slate-200">
+              <img 
+                src={logoImage} 
+                alt="GGPA Logo" 
+                className="h-16 w-auto object-contain"
+              />
             </div>
           </div>
           <h2 className="text-3xl font-bold font-serif text-slate-900">Secretariat Access</h2>

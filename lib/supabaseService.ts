@@ -1,8 +1,13 @@
-import { supabase, TABLES, STORAGE_BUCKET } from './supabase';
+import { supabase, TABLES, STORAGE_BUCKET, isSupabaseConfigured } from './supabase';
 import { AppState, NewsItem, GalleryImage, ContactInfo, Programs } from '../types';
 
 // Helper to upload image to Supabase Storage
 export const uploadImage = async (file: File, path: string): Promise<string | null> => {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase not configured. Cannot upload image.');
+    return null;
+  }
+
   try {
     const fileExt = file.name.split('.').pop();
     const fileName = `${path}/${Date.now()}.${fileExt}`;
@@ -32,6 +37,8 @@ export const uploadImage = async (file: File, path: string): Promise<string | nu
 export const supabaseService = {
   // Hero Section
   async getHero() {
+    if (!isSupabaseConfigured()) return null;
+    
     const { data, error } = await supabase
       .from(TABLES.HERO)
       .select('*')
@@ -42,6 +49,8 @@ export const supabaseService = {
   },
 
   async updateHero(hero: AppState['hero']) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.HERO)
       .upsert({ id: 1, ...hero }, { onConflict: 'id' });
@@ -51,6 +60,8 @@ export const supabaseService = {
 
   // Founder Section
   async getFounder() {
+    if (!isSupabaseConfigured()) return null;
+    
     const { data, error } = await supabase
       .from(TABLES.FOUNDER)
       .select('*')
@@ -61,6 +72,8 @@ export const supabaseService = {
   },
 
   async updateFounder(founder: AppState['founder']) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.FOUNDER)
       .upsert({ id: 1, ...founder }, { onConflict: 'id' });
@@ -70,6 +83,8 @@ export const supabaseService = {
 
   // News
   async getNews(): Promise<NewsItem[]> {
+    if (!isSupabaseConfigured()) return [];
+    
     const { data, error } = await supabase
       .from(TABLES.NEWS)
       .select('*')
@@ -80,6 +95,8 @@ export const supabaseService = {
   },
 
   async addNews(item: NewsItem) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.NEWS)
       .insert(item);
@@ -88,6 +105,8 @@ export const supabaseService = {
   },
 
   async deleteNews(id: string) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.NEWS)
       .delete()
@@ -98,6 +117,8 @@ export const supabaseService = {
 
   // Programs
   async getPrograms(): Promise<Programs | null> {
+    if (!isSupabaseConfigured()) return null;
+    
     const { data, error } = await supabase
       .from(TABLES.PROGRAMS)
       .select('*')
@@ -108,6 +129,8 @@ export const supabaseService = {
   },
 
   async updatePrograms(programs: Programs) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.PROGRAMS)
       .upsert({ id: 1, ...programs }, { onConflict: 'id' });
@@ -117,6 +140,8 @@ export const supabaseService = {
 
   // Contact
   async getContact(): Promise<ContactInfo | null> {
+    if (!isSupabaseConfigured()) return null;
+    
     const { data, error } = await supabase
       .from(TABLES.CONTACT)
       .select('*')
@@ -127,6 +152,8 @@ export const supabaseService = {
   },
 
   async updateContact(contact: ContactInfo) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.CONTACT)
       .upsert({ id: 1, ...contact }, { onConflict: 'id' });
@@ -136,6 +163,8 @@ export const supabaseService = {
 
   // Gallery
   async getGallery(): Promise<GalleryImage[]> {
+    if (!isSupabaseConfigured()) return [];
+    
     const { data, error } = await supabase
       .from(TABLES.GALLERY)
       .select('*')
@@ -146,6 +175,8 @@ export const supabaseService = {
   },
 
   async addGalleryImage(img: GalleryImage) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.GALLERY)
       .insert(img);
@@ -154,6 +185,8 @@ export const supabaseService = {
   },
 
   async deleteGalleryImage(id: string) {
+    if (!isSupabaseConfigured()) return;
+    
     const { error } = await supabase
       .from(TABLES.GALLERY)
       .delete()

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Download, UserPlus, Shield } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import heroImage from '../assets/images/hero_-UNGA.jpg';
 
 const Hero: React.FC = () => {
   const { state } = useContent();
@@ -48,9 +49,10 @@ const Hero: React.FC = () => {
             
             <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 border-t border-slate-100 pt-6 sm:pt-8">
               <div className="flex -space-x-3 sm:-space-x-4">
-                {[1,2,3,4].map(i => (
-                  <img key={i} src={`https://picsum.photos/100/100?random=${i}`} className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 sm:border-4 border-white object-cover" alt="Fellow" />
-                ))}
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 sm:border-4 border-white bg-amber-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">YAC</div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 sm:border-4 border-white bg-slate-900 flex items-center justify-center text-white font-bold text-xs sm:text-sm">GGPA</div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 sm:border-4 border-white bg-amber-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm">AU</div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 sm:border-4 border-white bg-slate-700 flex items-center justify-center text-white font-bold text-xs sm:text-sm">UN</div>
               </div>
               <div>
                 <p className="text-xs sm:text-sm font-bold text-slate-900">Join 120+ Technical Fellows</p>
@@ -63,13 +65,9 @@ const Hero: React.FC = () => {
             <div className="absolute -inset-2 sm:-inset-4 bg-amber-100/50 rounded-[1.5rem] sm:rounded-[2rem] blur-xl sm:blur-2xl z-0"></div>
             <div className="relative bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100 p-1.5 sm:p-2">
               <img 
-                src="https://img.freepik.com/free-photo/confident-african-professional-businessman-suit-standing-office_1150-10180.jpg?w=1380&t=st=1704067200~exp=1704067800~hmac=PLACEHOLDER_REPLACE_WITH_FREEPIK_AFRICAN_BUSINESS_LEADER" 
+                src={heroImage}
                 alt="Global Governance" 
                 className="rounded-[1rem] sm:rounded-[1.5rem] w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
-                onError={(e) => {
-                  // Fallback to original image if placeholder fails
-                  e.currentTarget.src = state.hero.image;
-                }}
               />
               
               <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-4 sm:left-6 lg:left-8 right-4 sm:right-6 lg:right-8 bg-white/90 backdrop-blur-md p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-white/20 shadow-lg">

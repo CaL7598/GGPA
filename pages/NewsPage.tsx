@@ -2,6 +2,9 @@ import React from 'react';
 import { useContent } from '../context/ContentContext';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ungaImage from '../assets/images/unga-wrap-up.webp';
+import auImage from '../assets/images/au-summit-in-addis-ababa-2-scaled.jpg';
+import governmentImage from '../assets/images/flickr_24757651797_bfa40e7b50_k_GovernmentZA-e1539695449767.jpg';
 
 const NewsPage: React.FC = () => {
   const { state } = useContent();
@@ -35,15 +38,19 @@ const NewsPage: React.FC = () => {
               className="block bg-white rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all group"
             >
               <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
-                {item.image && (
-                  <div className="md:w-64 shrink-0 rounded-xl sm:rounded-2xl overflow-hidden">
-                    <img 
-                      src={item.image} 
-                      alt={item.title}
-                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                )}
+                {(() => {
+                  const newsImages = [ungaImage, auImage, governmentImage];
+                  const newsImage = item.image || newsImages[state.news.indexOf(item) % newsImages.length];
+                  return (
+                    <div className="md:w-64 shrink-0 rounded-xl sm:rounded-2xl overflow-hidden">
+                      <img 
+                        src={newsImage} 
+                        alt={item.title}
+                        className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  );
+                })()}
                 <div className="flex-grow">
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                     <span className="px-2 sm:px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
