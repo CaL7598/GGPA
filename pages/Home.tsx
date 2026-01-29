@@ -1,10 +1,12 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import GovernanceDashboard from '../components/GovernanceDashboard';
 import DeepSearch from '../components/DeepSearch';
 import { useContent } from '../context/ContentContext';
 import { Star, ArrowRight } from 'lucide-react';
+import founderImage from '../assets/founder/WhatsApp Image 2026-01-29 at 09.51.13.jpeg';
 
 const Home: React.FC = () => {
   const { state } = useContent();
@@ -41,7 +43,7 @@ const Home: React.FC = () => {
                 "{state.founder.quote}"
               </blockquote>
               <div className="flex items-center gap-4">
-                <img src={state.founder.image} alt="Founder" className="w-16 h-16 rounded-full grayscale border-2 border-amber-200 object-cover" />
+                <img src={founderImage} alt="Founder" className="w-16 h-16 rounded-full grayscale border-2 border-amber-200 object-cover" />
                 <div>
                   <h5 className="font-bold text-slate-900">{state.founder.name}</h5>
                   <p className="text-sm text-slate-500 font-medium">{state.founder.title}</p>
@@ -64,15 +66,19 @@ const Home: React.FC = () => {
               <h2 className="text-4xl font-bold font-serif mb-4">The GGPA Dispatch</h2>
               <p className="text-slate-600">Latest communiqués and field notes from our Secretariat.</p>
             </div>
-            <a href="#/news" className="hidden sm:flex items-center gap-2 font-bold text-amber-600 hover:text-amber-700 transition-colors">
+            <Link to="/news" className="hidden sm:flex items-center gap-2 font-bold text-amber-600 hover:text-amber-700 transition-colors">
               View All Insights
               <ArrowRight size={20} />
-            </a>
+            </Link>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {state.news.map((item) => (
-              <div key={item.id} className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all group flex flex-col h-full">
+              <Link 
+                key={item.id} 
+                to={`/news/${item.id}`}
+                className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 hover:shadow-xl transition-all group flex flex-col h-full"
+              >
                 <div className="mb-6">
                   <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                     {item.category}
@@ -82,11 +88,11 @@ const Home: React.FC = () => {
                 <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">{item.excerpt}</p>
                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
                   <span className="text-xs font-bold text-slate-400">{item.date}</span>
-                  <button className="text-slate-900 hover:text-amber-600 transition-colors">
+                  <div className="text-slate-900 group-hover:text-amber-600 transition-colors">
                     <ArrowRight size={20} />
-                  </button>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

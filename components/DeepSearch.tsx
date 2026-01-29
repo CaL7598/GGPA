@@ -1,13 +1,24 @@
 
 import React, { useState, useRef } from 'react';
 import { Search, Loader2, BookOpen, AlertCircle, ExternalLink, Filter, Shield, FileUp, X, CheckCircle, Cpu, FileText, Eye, AlertTriangle, Layers, Target } from 'lucide-react';
-import { queryKnowledgeBase } from '../services/geminiService';
-import Tesseract from 'tesseract.js';
-import * as pdfjsLib from 'pdfjs-dist';
 import { AppPillar } from '../types';
 
-// Configure pdf.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.mjs';
+// Lazy load Tesseract to avoid blocking app initialization
+const getTesseract = async () => {
+  const Tesseract = await import('tesseract.js');
+  return Tesseract.default;
+};
+
+// Lazy load pdfjs-dist to avoid blocking app initialization
+let pdfjsLib: any = null;
+const getPdfjsLib = async () => {
+  if (!pdfjsLib) {
+    pdfjsLib = await import('pdfjs-dist');
+    // Configure pdf.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+  }
+  return pdfjsLib;
+};
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -26,6 +37,7 @@ const DeepSearch: React.FC = () => {
 
   const performOcrOnImage = async (imageSource: string | HTMLCanvasElement): Promise<string> => {
     try {
+      const Tesseract = await getTesseract();
       const { data: { text } } = await Tesseract.recognize(
         imageSource,
         'eng',
@@ -47,7 +59,8 @@ const DeepSearch: React.FC = () => {
   const processPdfFile = async (dataArray: Uint8Array): Promise<string> => {
     try {
       setOcrStatus('Initializing PDF Engine...');
-      const loadingTask = pdfjsLib.getDocument({ data: dataArray });
+      const pdfjs = await getPdfjsLib();
+      const loadingTask = pdfjs.getDocument({ data: dataArray });
       const pdf = await loadingTask.promise;
       let fullText = '';
       const pageLimit = Math.min(pdf.numPages, 5); 
@@ -131,12 +144,23 @@ const DeepSearch: React.FC = () => {
     if (!query.trim() && !file) return;
     setLoading(true);
     setError(null);
-    setOcrStatus('Synthesizing Data...');
+    setOcrStatus('Processing...');
     try {
-      const data = await queryKnowledgeBase(query, { pillar, mandate }, file || undefined);
-      setResult(data);
+      // Simple local search - just display OCR results and search query
+      const searchResults = {
+        summary: file?.extractedText 
+          ? `Document analysis complete. Found ${file.extractedText.length} characters of extracted text.${query.trim() ? ` Searching for: "${query}"` : ''}`
+          : `Search query: "${query}"`,
+        relevantVolumes: pillar !== 'All Pillars' ? [pillar] : ['All Volumes'],
+        legalBasis: mandate !== 'General Mandate' ? mandate : 'General Governance Framework',
+        suggestedAction: file?.extractedText 
+          ? 'Review the extracted text below for relevant information.'
+          : 'Upload a document to extract text, or refine your search query.',
+        ocrFindings: file?.extractedText || 'No document uploaded. Upload a PDF or image to extract text.'
+      };
+      setResult(searchResults);
     } catch (err) {
-      setError("Deep synthesis failed. Intelligence layer under peak load.");
+      setError("Search processing failed. Please try again.");
     } finally {
       setLoading(false);
       setOcrStatus('');

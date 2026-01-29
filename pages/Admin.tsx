@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
-import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check } from 'lucide-react';
+import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone } from 'lucide-react';
 
 const Admin: React.FC = () => {
-  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, resetToDefault } = useContent();
-  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery'>('content');
+  const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, resetToDefault } = useContent();
+  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact'>('content');
   const [saveStatus, setSaveStatus] = useState(false);
 
   const handleSave = () => {
@@ -66,6 +66,7 @@ const Admin: React.FC = () => {
             { id: 'content', icon: <Type size={18} />, label: 'Page Content' },
             { id: 'news', icon: <FileText size={18} />, label: 'GGPA News' },
             { id: 'gallery', icon: <Image size={18} />, label: 'Media Vault' },
+            { id: 'contact', icon: <Phone size={18} />, label: 'Contact Info' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -228,6 +229,95 @@ const Admin: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'contact' && (
+            <div className="space-y-12 animate-in slide-in-from-right duration-500">
+              <section>
+                <h3 className="text-xl font-bold font-serif mb-6 flex items-center gap-2">
+                  <Phone className="text-amber-600" size={24} />
+                  Headquarters Contact Information
+                </h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Location (City, Country)</label>
+                    <input 
+                      type="text" 
+                      value={state.contact?.location || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), location: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="Accra, Ghana"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Location Detail</label>
+                    <input 
+                      type="text" 
+                      value={state.contact?.locationDetail || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), locationDetail: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="Diplomatic Enclave"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Telephone</label>
+                    <input 
+                      type="text" 
+                      value={state.contact?.telephone || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), telephone: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="+233 (0) XXX XXX XXX"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Main Email</label>
+                    <input 
+                      type="email" 
+                      value={state.contact?.email || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), email: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="secretariat@ggpa-global.org"
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Office Hours</label>
+                    <input 
+                      type="text" 
+                      value={state.contact?.officeHours || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), officeHours: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="Monday - Friday: 9:00 AM - 5:00 PM GMT"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Office Hours Detail</label>
+                    <input 
+                      type="text" 
+                      value={state.contact?.officeHoursDetail || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), officeHoursDetail: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="By appointment for diplomatic engagements"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Media Email</label>
+                    <input 
+                      type="email" 
+                      value={state.contact?.mediaEmail || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), mediaEmail: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="media@ggpa-global.org"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Partnerships Email</label>
+                    <input 
+                      type="email" 
+                      value={state.contact?.partnershipsEmail || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), partnershipsEmail: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="partnerships@ggpa-global.org"
+                    />
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest">YAC Email</label>
+                    <input 
+                      type="email" 
+                      value={state.contact?.yacEmail || ''}
+                      onChange={(e) => updateContact({ ...(state.contact || {}), yacEmail: e.target.value } as any)}
+                      className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-slate-50 font-medium"
+                      placeholder="yac@ggpa-global.org"
+                    />
+                  </div>
+                </div>
+              </section>
             </div>
           )}
         </div>

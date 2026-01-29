@@ -29,6 +29,8 @@ export interface NewsItem {
   date: string;
   excerpt: string;
   author?: string;
+  content?: string;
+  image?: string;
 }
 
 export interface GalleryImage {
@@ -36,6 +38,18 @@ export interface GalleryImage {
   url: string;
   caption: string;
   date: string;
+}
+
+export interface ContactInfo {
+  location: string;
+  locationDetail: string;
+  telephone: string;
+  email: string;
+  officeHours: string;
+  officeHoursDetail: string;
+  mediaEmail?: string;
+  partnershipsEmail?: string;
+  yacEmail?: string;
 }
 
 export interface AppState {
@@ -54,4 +68,5 @@ export interface AppState {
   news: NewsItem[];
   compendium: VolumeCategory[];
   gallery: GalleryImage[];
+  contact: ContactInfo;
 }

@@ -3,15 +3,67 @@ import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import About from './pages/About';
 import Compendium from './pages/Compendium';
+import Pillars from './pages/Pillars';
+import Fellowship from './pages/Fellowship';
+import Contact from './pages/Contact';
 import GalleryPage from './pages/GalleryPage';
 import Admin from './pages/Admin';
+import NewsPage from './pages/NewsPage';
+import ArticlePage from './pages/ArticlePage';
+import Application from './pages/Application';
 import { ContentProvider } from './context/ContentContext';
 
-const About = () => <div className="py-40 text-center"><h1 className="text-4xl font-serif">About GGPA</h1><p className="mt-4 text-slate-500">The Secretariat, Governance Structure, and Act 992 Compliance.</p></div>;
-const Pillars = () => <div className="py-40 text-center"><h1 className="text-4xl font-serif">Pillars of Impact</h1><p className="mt-4 text-slate-500">Governance, Diplomacy, Research, Academy, Partnerships.</p></div>;
-const Fellowship = () => <div className="py-40 text-center"><h1 className="text-4xl font-serif">Fellowship: YAC Portal</h1><p className="mt-4 text-slate-500">Join the Technical Elite. Architects of Integrity.</p></div>;
-const Contact = () => <div className="py-40 text-center"><h1 className="text-4xl font-serif">Diplomatic Inquiries</h1><p className="mt-4 text-slate-500">Headquarters in Accra, Ghana.</p></div>;
+// Error Boundary Component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('GGPA Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'Poppins, sans-serif' }}>
+          <h1 style={{ fontSize: '24px', marginBottom: '16px', color: '#dc2626' }}>Something went wrong</h1>
+          <p style={{ color: '#64748b', marginBottom: '16px' }}>{this.state.error?.message}</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#0f172a',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Reload Page
+          </button>
+          <pre style={{ marginTop: '20px', padding: '16px', backgroundColor: '#f1f5f9', borderRadius: '8px', overflow: 'auto', textAlign: 'left' }}>
+            {this.state.error?.stack}
+          </pre>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -22,24 +74,31 @@ const ScrollToTop = () => {
 };
 
 const App: React.FC = () => {
+  console.log('GGPA: App component rendering...');
+  
   return (
-    <ContentProvider>
-      <Router>
-        <ScrollToTop />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/compendium" element={<Compendium />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/pillars" element={<Pillars />} />
-            <Route path="/fellowship" element={<Fellowship />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </ContentProvider>
+    <ErrorBoundary>
+      <ContentProvider>
+        <Router>
+          <ScrollToTop />
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/compendium" element={<Compendium />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/pillars" element={<Pillars />} />
+              <Route path="/fellowship" element={<Fellowship />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/:id" element={<ArticlePage />} />
+              <Route path="/application" element={<Application />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </ContentProvider>
+    </ErrorBoundary>
   );
 };
 

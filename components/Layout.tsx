@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Shield, ChevronRight, Search, Globe, Mail, Phone, MapPin } from 'lucide-react';
+import { Menu, X, ChevronRight, Search, Globe, Mail, Phone, MapPin } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
+import logo from '../assets/Logo/logo.png';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,10 +21,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <a href="#/" className="flex items-center gap-2 group">
-                <div className="bg-navy-900 bg-slate-900 p-2 rounded-lg text-white">
-                  <Shield size={24} className="text-amber-400" />
-                </div>
+              <a href="#/" className="flex items-center gap-3 group">
+                <img 
+                  src={logo} 
+                  alt="GGPA Logo" 
+                  className="h-10 w-auto object-contain"
+                />
                 <div className="flex flex-col">
                   <span className={`text-xl font-bold font-serif leading-none tracking-tight ${scrolled ? 'text-slate-900' : 'text-slate-900'}`}>GGPA</span>
                   <span className={`text-[10px] uppercase tracking-[0.2em] font-medium ${scrolled ? 'text-slate-500' : 'text-slate-600'}`}>Global Governance & Policy Alliance</span>
@@ -94,8 +97,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div>
-              <div className="flex items-center gap-2 mb-6">
-                <Shield size={24} className="text-amber-400" />
+              <div className="flex items-center gap-3 mb-6">
+                <img 
+                  src={logo} 
+                  alt="GGPA Logo" 
+                  className="h-8 w-auto object-contain"
+                />
                 <span className="text-2xl font-bold font-serif tracking-tight">GGPA</span>
               </div>
               <p className="text-slate-400 text-sm leading-relaxed mb-6">
