@@ -198,7 +198,7 @@ const About: React.FC = () => {
               </div>
               <h3 className="text-xl sm:text-2xl font-bold font-serif mb-3 sm:mb-4">Legal Transparency</h3>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                We are registered under the Ghana Companies Act, 2019 (Act 992) and maintain a "Public Disclosure" policy regarding our board and senior management remuneration.
+                GGPA is currently finalizing its formal incorporation under the Ghana Companies Act, 2019 (Act 992) as a Non-Governmental Organization (NGO). While in this final administrative phase, we maintain a "Public Disclosure" policy regarding our board and senior management remuneration, upholding full fiduciary transparency ahead of statutory completion.
               </p>
             </div>
           </div>
@@ -210,7 +210,7 @@ const About: React.FC = () => {
             <Shield className="mx-auto mb-6 text-amber-400" size={48} />
             <h2 className="text-4xl font-bold font-serif mb-6">Act 992 Compliance</h2>
             <p className="text-xl text-slate-300 leading-relaxed mb-8">
-              GGPA is a registered entity under the Ghana Companies Act, 2019 (Act 992). Our operations are fully compliant with all statutory requirements, ensuring complete transparency and legal adherence.
+              GGPA is currently finalizing its formal incorporation under the Ghana Companies Act, 2019 (Act 992) as a Non-Governmental Organization (NGO). While in this final administrative phase, GGPA operates as a strategic policy incubator committed to full statutory compliance and fiduciary transparency.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mt-12">
               <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
@@ -222,8 +222,8 @@ const About: React.FC = () => {
                 <p className="text-sm text-slate-300">Full data protection and privacy compliance</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
-                <h4 className="font-bold mb-2">Act 992 Registered</h4>
-                <p className="text-sm text-slate-300">Legally registered under Ghana Companies Act, 2019</p>
+                <h4 className="font-bold mb-2">Act 992 — Incorporation in Progress</h4>
+                <p className="text-sm text-slate-300">Finalizing NGO registration under Ghana Companies Act, 2019 (Act 992)</p>
               </div>
             </div>
           </div>
@@ -243,7 +243,7 @@ const About: React.FC = () => {
                   <h3 className="text-xl sm:text-2xl font-bold font-serif mb-2">{state.founder.name}</h3>
                   <p className="text-sm sm:text-base text-slate-600 font-medium mb-3 sm:mb-4">{state.founder.title}</p>
                   <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Founder & CEO</span>
+                    <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Founder & Executive Director</span>
                     <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Commonwealth DSG Nominee</span>
                     <span className="px-2 sm:px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] sm:text-xs font-bold">Researcher (IR)</span>
                   </div>
@@ -253,13 +253,39 @@ const About: React.FC = () => {
                 <div>
                   <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Professional Overview</h4>
                   <p className="text-slate-700 leading-relaxed">
-                    As the Founder and CEO, David serves as the primary link between the Board of Directors and the Management Team. He is responsible for translating the GGPA's high-level Strategic Plan into actionable operational results that drive global impact. Under his leadership, the organization bridges the gap between visionary policy and on-the-ground administrative execution.
+                    As the Founder and Executive Director of the Global Governance & Policy Alliance (GGPA), David serves as the primary link between high-level strategic vision and operational execution. He is the lead architect of the organization's technical frameworks, responsible for translating the GGPA's Strategic Plan into actionable results that address the most complex challenges in global governance and humanitarian action.
                   </p>
+                </div>
+                <div>
+                  <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Humanitarian Governance & Technical Innovation</h4>
+                  <p className="text-slate-700 leading-relaxed mb-4">
+                    David is a pioneer in transitioning humanitarian action from reactive response to Predictive Governance. He developed the "OCHA Governance Stack," a proprietary technical framework designed to modernize the global humanitarian architecture. This stack ensures life-saving aid is delivered with higher transparency and lower friction through three core pillars:
+                  </p>
+                  <ul className="space-y-3 text-slate-700">
+                    <li className="flex items-start gap-3">
+                      <Shield className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>The IIGRA Diagnostic Engine:</strong> A predictive tool utilizing the Sovereign Friction Coefficient (SFC) to identify bureaucratic bottlenecks with 85% accuracy.
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Users className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>The Shadow-Role Model:</strong> A symbiotic operational framework that pairs international expertise with national leadership to ensure sovereign-first aid delivery.
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FileText className="text-amber-600 shrink-0 mt-1" size={20} />
+                      <div>
+                        <strong>The ZLT Protocol:</strong> A blockchain-enabled 4-Gate Ledger system providing zero-latency tracking and "fiduciary hardening" to eliminate fraud and resource leakage.
+                      </div>
+                    </li>
+                  </ul>
                 </div>
                 <div>
                   <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">International Diplomatic Standing</h4>
                   <p className="text-slate-700 leading-relaxed">
-                    David is recognized as an authoritative voice in international politics. His global standing is evidenced by his nomination by the Ghanaian Ministry of Foreign Affairs for the position of Deputy Secretary-General (Programme) of the Commonwealth Secretariat in London. This nomination reflects his unique ability to navigate complex diplomatic corridors and manage multi-lateral relations at the highest levels of global governance.
+                    David is recognized as an authoritative voice in international politics. His global standing is evidenced by his nomination by the Ghanaian Ministry of Foreign Affairs for the position of Deputy Secretary-General (Programme) of the Commonwealth Secretariat in London. This nomination, alongside his current candidacy for the Assistant Secretary-General role at UN OCHA, reflects his unique ability to navigate complex diplomatic corridors and manage multi-lateral relations at the highest levels.
                   </p>
                 </div>
                 <div>
@@ -268,19 +294,19 @@ const About: React.FC = () => {
                     <li className="flex items-start gap-3">
                       <GraduationCap className="text-amber-600 shrink-0 mt-1" size={20} />
                       <div>
-                        <strong>Researcher (International Relations):</strong> His ongoing research focuses on geopolitics and public policy, providing a scientific, evidence-based foundation for GGPA's policy frameworks.
+                        <strong>Researcher (International Relations):</strong> His ongoing research focuses on the "Human Rights-Sovereignty Nexus," providing an evidence-based foundation for GGPA's policy frameworks.
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
                       <FileText className="text-amber-600 shrink-0 mt-1" size={20} />
                       <div>
-                        <strong>Legal Expertise:</strong> David holds a Bachelor of Laws (LLB), empowering him with deep knowledge of international legal frameworks, statutory compliance, and human rights standards.
+                        <strong>Legal Expertise:</strong> David holds a Bachelor of Laws, empowering him with deep knowledge of international legal frameworks, statutory compliance, and human rights standards.
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
                       <Globe className="text-amber-600 shrink-0 mt-1" size={20} />
                       <div>
-                        <strong>Global Policy Contributions:</strong> He provided strategic input and research to the UN Special Rapporteur's 2025 thematic report for the UN General Assembly, specifically regarding the concentration of corporate power in food systems and its impact on human rights.
+                        <strong>Global Policy Contributions:</strong> He provided strategic research for the UN Special Rapporteur's 2025 thematic report regarding corporate power in food systems and its impact on human rights.
                       </div>
                     </li>
                   </ul>
@@ -288,15 +314,15 @@ const About: React.FC = () => {
                 <div>
                   <h4 className="text-amber-600 font-bold text-sm tracking-widest uppercase mb-4">Institutional Leadership</h4>
                   <ul className="space-y-3 text-slate-700">
-                    <li><strong>Assistant Registrar (UENR):</strong> At the University of Energy and Natural Resources (UENR) in Ghana, David has led internationalization efforts, the modernization of institutional policy, and technical capacity building for student leaders.</li>
-                    <li><strong>Erasmus+ Mobility Manager:</strong> He manages international credit mobility and faculty exchanges with European partner universities, fostering intercultural skills and global academic networking between Africa and the EU.</li>
-                    <li><strong>Youth Advocate:</strong> He has pioneered the "Critical Youth Mandate" within the GGPA, ensuring that young people are not just observers but direct contributors to national and global policy-making through functional authority.</li>
+                    <li><strong>Senior Assistant Registrar (UENR):</strong> At the University of Energy and Natural Resources (UENR) in Ghana, David leads internationalization efforts, modernization of institutional policy, and technical capacity building.</li>
+                    <li><strong>Erasmus+ Mobility Manager:</strong> He manages international credit mobility and faculty exchanges with European partner universities, fostering global academic networking between Africa and the EU.</li>
+                    <li><strong>Youth Advocate:</strong> He pioneered the "Critical Youth Mandate," ensuring young leaders hold functional authority in national and global policy-making.</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100">
                   <h4 className="text-amber-900 font-bold text-sm tracking-widest uppercase mb-2">The Decade Vision</h4>
                   <p className="text-amber-800 leading-relaxed">
-                    David has positioned the GGPA as a vital partner for the African Union (AU) and The Commonwealth. His vision for the next decade is to establish the GGPA as the leading African-based, globally aligned institution that empowers the rising generation to lead with integrity, transparency, and scientific precision.
+                    David has positioned the GGPA as a vital partner for the African Union (AU), The Commonwealth, and the United Nations. His vision for the next decade is to establish the GGPA as the leading African-based, globally aligned institution that empowers the rising generation to lead with integrity, transparency, and scientific precision.
                   </p>
                 </div>
               </div>
