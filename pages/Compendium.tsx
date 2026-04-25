@@ -1,9 +1,12 @@
 
 import React from 'react';
-import { VOLUME_CATEGORIES } from '../constants';
+import { useContent } from '../context/ContentContext';
 import { Download, Book, Shield, FileText, ChevronRight } from 'lucide-react';
 
 const Compendium: React.FC = () => {
+  const { state } = useContent();
+  const categories = state.compendium;
+
   return (
     <div className="py-20">
       <div className="bg-slate-900 text-white py-24 mb-20 relative overflow-hidden">
@@ -22,7 +25,7 @@ const Compendium: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12">
-          {VOLUME_CATEGORIES.map((category, idx) => (
+          {categories.map((category, idx) => (
             <div key={category.title} className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-2xl transition-all group">
               <div className="flex justify-between items-start mb-8">
                 <div>
@@ -50,10 +53,21 @@ const Compendium: React.FC = () => {
                 ))}
               </div>
 
-              <button className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-5 rounded-2xl font-bold hover:bg-slate-800 transition-all transform hover:-translate-y-1 shadow-lg">
-                <Download size={20} />
-                Download Executive Summary
-              </button>
+              {category.fileUrl ? (
+                <a
+                  href={category.fileUrl}
+                  download={category.fileName || `${category.title}.pdf`}
+                  className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-5 rounded-2xl font-bold hover:bg-amber-600 transition-all transform hover:-translate-y-1 shadow-lg"
+                >
+                  <Download size={20} />
+                  Download Executive Summary
+                </a>
+              ) : (
+                <button disabled className="w-full flex items-center justify-center gap-2 bg-slate-200 text-slate-400 py-5 rounded-2xl font-bold cursor-not-allowed shadow-sm">
+                  <Download size={20} />
+                  No Document Uploaded Yet
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -614,8 +614,8 @@ const Admin: React.FC = () => {
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Volumes</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={category.volumes}
                           onChange={(e) => {
                             const newCompendium = [...state.compendium];
@@ -625,6 +625,48 @@ const Admin: React.FC = () => {
                           className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
                           placeholder="e.g., Vols I-VIII"
                         />
+                      </div>
+
+                      {/* PDF Upload */}
+                      <div className="pt-4 border-t border-slate-200 mt-4">
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Executive Summary PDF</label>
+                        {category.fileUrl ? (
+                          <div className="flex items-center gap-3 mb-3 p-3 bg-green-50 border border-green-200 rounded-xl">
+                            <FileText size={16} className="text-green-600 shrink-0" />
+                            <span className="text-xs text-green-700 font-medium truncate flex-grow">{category.fileName || 'Document uploaded'}</span>
+                            <button
+                              onClick={() => {
+                                const newCompendium = [...state.compendium];
+                                newCompendium[categoryIndex] = { ...category, fileUrl: undefined, fileName: undefined };
+                                updateCompendium(newCompendium);
+                              }}
+                              className="text-red-500 hover:text-red-700 shrink-0"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ) : null}
+                        <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
+                          <Upload size={16} className="text-slate-400 shrink-0" />
+                          <span className="text-xs text-slate-500 font-medium">
+                            {category.fileUrl ? 'Replace PDF' : 'Upload PDF'}
+                          </span>
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const url = await uploadImage(file, 'compendium');
+                              if (url) {
+                                const newCompendium = [...state.compendium];
+                                newCompendium[categoryIndex] = { ...category, fileUrl: url, fileName: file.name };
+                                updateCompendium(newCompendium);
+                              }
+                            }}
+                          />
+                        </label>
                       </div>
                     </div>
                   ))}

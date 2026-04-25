@@ -13,6 +13,8 @@ export interface VolumeCategory {
   range: string;
   description: string;
   volumes: string[];
+  fileUrl?: string;
+  fileName?: string;
 }
 
 export interface Stats {
