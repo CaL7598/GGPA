@@ -74,6 +74,6 @@ export const TABLES = {
   DOCUMENTS: 'documents',
 } as const;
 
-// Storage bucket names
+// Storage bucket name (single bucket for all media including PDFs)
 export const STORAGE_BUCKET = 'ggpa-media';
-export const DOCUMENTS_BUCKET = 'documents';
+export const DOCUMENTS_BUCKET = 'ggpa-media';

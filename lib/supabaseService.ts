@@ -211,8 +211,7 @@ export const supabaseService = {
   async uploadDocument(file: File, title: string, description: string): Promise<LibraryDocument | null> {
     if (!isSupabaseConfigured()) return null;
 
-    const fileExt = file.name.split('.').pop();
-    const filePath = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+    const filePath = `documents/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
 
     const { error: uploadError } = await supabase.storage
       .from(DOCUMENTS_BUCKET)
