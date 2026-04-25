@@ -13,6 +13,7 @@ import Admin from './pages/Admin';
 import NewsPage from './pages/NewsPage';
 import ArticlePage from './pages/ArticlePage';
 import Application from './pages/Application';
+import Library from './pages/Library';
 import { ContentProvider } from './context/ContentContext';
 import { AuthProvider } from './context/AuthContext';
 
@@ -96,6 +97,7 @@ const App: React.FC = () => {
                 <Route path="/news" element={<NewsPage />} />
                 <Route path="/news/:id" element={<ArticlePage />} />
                 <Route path="/application" element={<Application />} />
+                <Route path="/library" element={<Library />} />
               </Routes>
             </Layout>
           </Router>

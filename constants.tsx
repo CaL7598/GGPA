@@ -8,6 +8,7 @@ export const NAV_LINKS = [
   { name: 'Gallery', href: '#/gallery' },
   { name: 'Pillars', href: '#/pillars' },
   { name: 'Fellowship', href: '#/fellowship' },
+  { name: 'Library & Repository', href: '#/library' },
   { name: 'Contact', href: '#/contact' }
 ];
 
