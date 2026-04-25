@@ -1,5 +1,5 @@
-import { supabase, TABLES, STORAGE_BUCKET, isSupabaseConfigured } from './supabase';
-import { AppState, NewsItem, GalleryImage, ContactInfo, Programs } from '../types';
+import { supabase, TABLES, STORAGE_BUCKET, DOCUMENTS_BUCKET, isSupabaseConfigured } from './supabase';
+import { AppState, NewsItem, GalleryImage, ContactInfo, Programs, LibraryDocument } from '../types';
 
 // Helper to upload image to Supabase Storage
 export const uploadImage = async (file: File, path: string): Promise<string | null> => {
@@ -186,12 +186,72 @@ export const supabaseService = {
 
   async deleteGalleryImage(id: string) {
     if (!isSupabaseConfigured()) return;
-    
+
     const { error } = await supabase
       .from(TABLES.GALLERY)
       .delete()
       .eq('id', id);
-    
+
+    if (error) throw error;
+  },
+
+  // Library Documents
+  async getDocuments(): Promise<LibraryDocument[]> {
+    if (!isSupabaseConfigured()) return [];
+
+    const { data, error } = await supabase
+      .from(TABLES.DOCUMENTS)
+      .select('*')
+      .order('uploaded_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  async uploadDocument(file: File, title: string, description: string): Promise<LibraryDocument | null> {
+    if (!isSupabaseConfigured()) return null;
+
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from(DOCUMENTS_BUCKET)
+      .upload(filePath, file, { upsert: false });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = supabase.storage
+      .from(DOCUMENTS_BUCKET)
+      .getPublicUrl(filePath);
+
+    const record = {
+      title,
+      description,
+      file_url: urlData.publicUrl,
+      file_name: file.name,
+      file_path: filePath,
+    };
+
+    const { data, error: insertError } = await supabase
+      .from(TABLES.DOCUMENTS)
+      .insert(record)
+      .select()
+      .single();
+
+    if (insertError) throw insertError;
+    return data;
+  },
+
+  async deleteDocument(id: string, filePath: string) {
+    if (!isSupabaseConfigured()) return;
+
+    await supabase.storage.from(DOCUMENTS_BUCKET).remove([filePath]);
+
+    const { error } = await supabase
+      .from(TABLES.DOCUMENTS)
+      .delete()
+      .eq('id', id);
+
     if (error) throw error;
   },
 };

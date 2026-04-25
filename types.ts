@@ -72,6 +72,16 @@ export interface FooterContent {
   socialLinks: { type: string; href: string }[];
 }
 
+export interface LibraryDocument {
+  id: string;
+  title: string;
+  description?: string;
+  file_url: string;
+  file_name: string;
+  file_path: string;
+  uploaded_at: string;
+}
+
 export interface AppState {
   hero: {
     headline: string;

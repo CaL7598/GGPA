@@ -71,7 +71,9 @@ export const TABLES = {
   CONTACT: 'contact',
   GALLERY: 'gallery',
   STATS: 'stats',
+  DOCUMENTS: 'documents',
 } as const;
 
-// Storage bucket name
+// Storage bucket names
 export const STORAGE_BUCKET = 'ggpa-media';
+export const DOCUMENTS_BUCKET = 'documents';

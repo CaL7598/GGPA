@@ -3,23 +3,61 @@ import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone, LogOut } from 'lucide-react';
+import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone, LogOut, BookOpen, Upload, Eye, Download } from 'lucide-react';
 import AdminLogin from './AdminLogin';
-import { uploadImage } from '../lib/supabaseService';
+import { uploadImage, supabaseService } from '../lib/supabaseService';
 import { supabase } from '../lib/supabase';
+import { LibraryDocument } from '../types';
 
 const Admin: React.FC = () => {
   const { user, loading: authLoading, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { state, updateHero, updateFounder, addNews, deleteNews, addGalleryImage, deleteGalleryImage, updateContact, updatePrograms, updateStats, updateCompendium, updateNavigation, updateFooter, resetToDefault } = useContent();
-  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs' | 'stats' | 'compendium' | 'navigation' | 'footer'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs' | 'stats' | 'compendium' | 'navigation' | 'footer' | 'library'>('content');
   const [saveStatus, setSaveStatus] = useState(false);
+  const [documents, setDocuments] = useState<LibraryDocument[]>([]);
+  const [docTitle, setDocTitle] = useState('');
+  const [docDescription, setDocDescription] = useState('');
+  const [docFile, setDocFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [docError, setDocError] = useState('');
 
   useEffect(() => {
     if (!authLoading && !user) {
       // Redirect handled by showing login component
     }
   }, [user, authLoading]);
+
+  useEffect(() => {
+    if (activeTab === 'library') {
+      supabaseService.getDocuments().then(setDocuments).catch(console.error);
+    }
+  }, [activeTab]);
+
+  const handleDocumentUpload = async () => {
+    if (!docFile || !docTitle.trim()) {
+      setDocError('Title and file are required.');
+      return;
+    }
+    setDocError('');
+    setUploading(true);
+    try {
+      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim());
+      if (doc) setDocuments(prev => [doc, ...prev]);
+      setDocTitle('');
+      setDocDescription('');
+      setDocFile(null);
+    } catch (err: any) {
+      setDocError(err.message || 'Upload failed.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteDocument = async (id: string, filePath: string) => {
+    await supabaseService.deleteDocument(id, filePath).catch(console.error);
+    setDocuments(prev => prev.filter(d => d.id !== id));
+  };
 
   if (authLoading) {
     return (
@@ -138,6 +176,7 @@ const Admin: React.FC = () => {
             { id: 'compendium', icon: <FileText size={18} />, label: 'Compendium' },
             { id: 'navigation', icon: <LayoutDashboard size={18} />, label: 'Navigation' },
             { id: 'footer', icon: <LayoutDashboard size={18} />, label: 'Footer' },
+            { id: 'library', icon: <BookOpen size={18} />, label: 'Library' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -787,6 +826,101 @@ const Admin: React.FC = () => {
                       className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
                     />
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'library' && (
+            <div className="space-y-8 animate-in slide-in-from-right duration-500">
+              <div>
+                <h3 className="text-xl font-bold font-serif mb-2 flex items-center gap-2">
+                  <BookOpen className="text-amber-600" size={24} /> Library &amp; Repository
+                </h3>
+                <p className="text-sm text-slate-500 mb-8">Upload PDF documents to the public library. They will appear on the Library &amp; Repository page.</p>
+
+                {/* Upload Form */}
+                <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 mb-8">
+                  <h4 className="text-sm font-bold text-slate-700 uppercase tracking-widest mb-5">Upload New Document</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Document Title *</label>
+                      <input
+                        type="text"
+                        value={docTitle}
+                        onChange={e => setDocTitle(e.target.value)}
+                        placeholder="e.g. Act 992 Compliance Framework"
+                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description (optional)</label>
+                      <textarea
+                        rows={2}
+                        value={docDescription}
+                        onChange={e => setDocDescription(e.target.value)}
+                        placeholder="Brief summary of the document…"
+                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">PDF File *</label>
+                      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
+                        <Upload size={20} className="text-slate-400" />
+                        <span className="text-sm text-slate-500 font-medium">
+                          {docFile ? docFile.name : 'Click to select a PDF file'}
+                        </span>
+                        <input
+                          type="file"
+                          accept="application/pdf"
+                          className="hidden"
+                          onChange={e => setDocFile(e.target.files?.[0] || null)}
+                        />
+                      </label>
+                    </div>
+                    {docError && <p className="text-red-500 text-sm font-medium">{docError}</p>}
+                    <button
+                      onClick={handleDocumentUpload}
+                      disabled={uploading}
+                      className="flex items-center gap-2 bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-700 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {uploading ? 'Uploading…' : <><Upload size={16} /> Upload Document</>}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Document List */}
+                <div className="space-y-4">
+                  {documents.length === 0 ? (
+                    <div className="text-center py-16 text-slate-400">
+                      <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
+                      <p className="font-medium">No documents uploaded yet.</p>
+                    </div>
+                  ) : (
+                    documents.map(doc => (
+                      <div key={doc.id} className="flex items-start gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center shrink-0">
+                          <FileText className="text-amber-600" size={20} />
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <p className="font-bold text-slate-800 truncate">{doc.title}</p>
+                          {doc.description && <p className="text-xs text-slate-500 mt-0.5">{doc.description}</p>}
+                          <p className="text-[10px] text-slate-400 mt-1">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <a href={doc.file_url} target="_blank" rel="noreferrer" className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors" title="View">
+                            <Eye size={16} className="text-slate-600" />
+                          </a>
+                          <a href={doc.file_url} download={doc.file_name} className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors" title="Download">
+                            <Download size={16} className="text-slate-600" />
+                          </a>
+                          <button onClick={() => handleDeleteDocument(doc.id, doc.file_path)} className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="Delete">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
