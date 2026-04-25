@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone, LogOut, BookOpen, Upload, Eye, Download } from 'lucide-react';
+import { Save, Plus, Trash2, LayoutDashboard, FileText, Image, RefreshCcw, Type, ShieldCheck, Check, Phone, LogOut, BookOpen, Upload, Eye, Download, ChevronDown } from 'lucide-react';
 import AdminLogin from './AdminLogin';
 import { uploadImage, supabaseService } from '../lib/supabaseService';
 import { supabase } from '../lib/supabase';
@@ -16,12 +16,8 @@ const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'content' | 'news' | 'gallery' | 'contact' | 'programs' | 'stats' | 'compendium' | 'navigation' | 'footer' | 'library'>('content');
   const [saveStatus, setSaveStatus] = useState(false);
   const [documents, setDocuments] = useState<LibraryDocument[]>([]);
-  const [docTitle, setDocTitle] = useState('');
-  const [docDescription, setDocDescription] = useState('');
-  const [docFile, setDocFile] = useState<File | null>(null);
-  const [docCategory, setDocCategory] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [docError, setDocError] = useState('');
+  const [formStates, setFormStates] = useState<Record<string, { title: string; description: string; file: File | null; uploading: boolean; error: string }>>({});
+  const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -35,24 +31,30 @@ const Admin: React.FC = () => {
     }
   }, [activeTab]);
 
-  const handleDocumentUpload = async () => {
-    if (!docFile || !docTitle.trim()) {
-      setDocError('Title and file are required.');
+  const getForm = (key: string) =>
+    formStates[key] ?? { title: '', description: '', file: null, uploading: false, error: '' };
+
+  const patchForm = (key: string, patch: Partial<ReturnType<typeof getForm>>) =>
+    setFormStates(prev => ({ ...prev, [key]: { ...getForm(key), ...patch } }));
+
+  const toggleCat = (key: string) =>
+    setExpandedCats(prev => { const s = new Set(prev); s.has(key) ? s.delete(key) : s.add(key); return s; });
+
+  const handleUpload = async (key: string, categoryName?: string) => {
+    const form = getForm(key);
+    if (!form.file || !form.title.trim()) {
+      patchForm(key, { error: 'Title and file are required.' });
       return;
     }
-    setDocError('');
-    setUploading(true);
+    patchForm(key, { error: '', uploading: true });
     try {
-      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim(), docCategory || undefined);
+      const doc = await supabaseService.uploadDocument(form.file, form.title.trim(), form.description.trim(), categoryName);
       if (doc) setDocuments(prev => [doc, ...prev]);
-      setDocTitle('');
-      setDocDescription('');
-      setDocFile(null);
-      setDocCategory('');
+      patchForm(key, { title: '', description: '', file: null });
     } catch (err: any) {
-      setDocError(err.message || 'Upload failed.');
+      patchForm(key, { error: err.message || 'Upload failed.' });
     } finally {
-      setUploading(false);
+      patchForm(key, { uploading: false });
     }
   };
 
@@ -876,110 +878,119 @@ const Admin: React.FC = () => {
           )}
 
           {activeTab === 'library' && (
-            <div className="space-y-8 animate-in slide-in-from-right duration-500">
-              <div>
-                <h3 className="text-xl font-bold font-serif mb-2 flex items-center gap-2">
+            <div className="space-y-4 animate-in slide-in-from-right duration-500">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold font-serif mb-1 flex items-center gap-2">
                   <BookOpen className="text-amber-600" size={24} /> Library &amp; Repository
                 </h3>
-                <p className="text-sm text-slate-500 mb-8">Upload PDF documents to the public library. They will appear on the Library &amp; Repository page.</p>
+                <p className="text-sm text-slate-500">Click a category to expand it, then upload PDFs directly into that section.</p>
+              </div>
 
-                {/* Upload Form */}
-                <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 mb-8">
-                  <h4 className="text-sm font-bold text-slate-700 uppercase tracking-widest mb-5">Upload New Document</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Document Title *</label>
-                      <input
-                        type="text"
-                        value={docTitle}
-                        onChange={e => setDocTitle(e.target.value)}
-                        placeholder="e.g. Act 992 Compliance Framework"
-                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description (optional)</label>
-                      <textarea
-                        rows={2}
-                        value={docDescription}
-                        onChange={e => setDocDescription(e.target.value)}
-                        placeholder="Brief summary of the document…"
-                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Compendium Category (optional)</label>
-                      <select
-                        value={docCategory}
-                        onChange={e => setDocCategory(e.target.value)}
-                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
-                      >
-                        <option value="">— No category (general) —</option>
-                        {state.compendium.map(cat => (
-                          <option key={cat.id} value={cat.title}>{cat.title}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">PDF File *</label>
-                      <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
-                        <Upload size={20} className="text-slate-400" />
-                        <span className="text-sm text-slate-500 font-medium">
-                          {docFile ? docFile.name : 'Click to select a PDF file'}
-                        </span>
-                        <input
-                          type="file"
-                          accept="application/pdf"
-                          className="hidden"
-                          onChange={e => setDocFile(e.target.files?.[0] || null)}
-                        />
-                      </label>
-                    </div>
-                    {docError && <p className="text-red-500 text-sm font-medium">{docError}</p>}
+              {[
+                ...state.compendium.map(cat => ({ key: cat.title, label: cat.title, badge: cat.range, categoryName: cat.title as string | undefined })),
+                { key: 'general', label: 'General / Uncategorized', badge: '', categoryName: undefined },
+              ].map(({ key, label, badge, categoryName }) => {
+                const catDocs = documents.filter(d =>
+                  categoryName ? d.category_name === categoryName : !d.category_name
+                );
+                const form = getForm(key);
+                const isExpanded = expandedCats.has(key);
+
+                return (
+                  <div key={key} className="border border-slate-200 rounded-2xl overflow-hidden">
+                    {/* Accordion header */}
                     <button
-                      onClick={handleDocumentUpload}
-                      disabled={uploading}
-                      className="flex items-center gap-2 bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-700 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => toggleCat(key)}
+                      className="w-full flex items-center justify-between px-5 py-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
                     >
-                      {uploading ? 'Uploading…' : <><Upload size={16} /> Upload Document</>}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Document List */}
-                <div className="space-y-4">
-                  {documents.length === 0 ? (
-                    <div className="text-center py-16 text-slate-400">
-                      <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
-                      <p className="font-medium">No documents uploaded yet.</p>
-                    </div>
-                  ) : (
-                    documents.map(doc => (
-                      <div key={doc.id} className="flex items-start gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200">
-                        <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center shrink-0">
-                          <FileText className="text-amber-600" size={20} />
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
+                          <BookOpen size={15} className="text-amber-600" />
                         </div>
-                        <div className="flex-grow min-w-0">
-                          <p className="font-bold text-slate-800 truncate">{doc.title}</p>
-                          {doc.description && <p className="text-xs text-slate-500 mt-0.5">{doc.description}</p>}
-                          <p className="text-[10px] text-slate-400 mt-1">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <a href={doc.file_url} target="_blank" rel="noreferrer" className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors" title="View">
-                            <Eye size={16} className="text-slate-600" />
-                          </a>
-                          <a href={doc.file_url} download={doc.file_name} className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors" title="Download">
-                            <Download size={16} className="text-slate-600" />
-                          </a>
-                          <button onClick={() => handleDeleteDocument(doc.id, doc.file_path)} className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="Delete">
-                            <Trash2 size={16} />
-                          </button>
+                        <div>
+                          <p className="font-bold text-slate-800 text-sm">{label}</p>
+                          {badge && <p className="text-[10px] text-slate-400 font-medium">{badge}</p>}
                         </div>
                       </div>
-                    ))
-                  )}
-                </div>
-              </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="px-2.5 py-0.5 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+                          {catDocs.length} doc{catDocs.length !== 1 ? 's' : ''}
+                        </span>
+                        <ChevronDown size={16} className={`text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                      </div>
+                    </button>
+
+                    {/* Expanded content */}
+                    {isExpanded && (
+                      <div className="p-5 border-t border-slate-200 space-y-4">
+                        {/* Upload form */}
+                        <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+                          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Upload to {label}</p>
+                          <input
+                            type="text"
+                            value={form.title}
+                            onChange={e => patchForm(key, { title: e.target.value })}
+                            placeholder="Document title *"
+                            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white text-sm font-medium"
+                          />
+                          <textarea
+                            rows={2}
+                            value={form.description}
+                            onChange={e => patchForm(key, { description: e.target.value })}
+                            placeholder="Description (optional)"
+                            className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white text-sm font-medium"
+                          />
+                          <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
+                            <Upload size={16} className="text-slate-400 shrink-0" />
+                            <span className="text-xs text-slate-500 font-medium truncate">
+                              {form.file ? form.file.name : 'Click to select a PDF file'}
+                            </span>
+                            <input
+                              type="file"
+                              accept="application/pdf"
+                              className="hidden"
+                              onChange={e => patchForm(key, { file: e.target.files?.[0] || null })}
+                            />
+                          </label>
+                          {form.error && <p className="text-red-500 text-xs font-medium">{form.error}</p>}
+                          <button
+                            onClick={() => handleUpload(key, categoryName)}
+                            disabled={form.uploading}
+                            className="flex items-center gap-2 bg-amber-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {form.uploading ? 'Uploading…' : <><Upload size={13} /> Upload Document</>}
+                          </button>
+                        </div>
+
+                        {/* Document list */}
+                        {catDocs.length === 0 ? (
+                          <p className="text-xs text-slate-400 text-center py-3">No documents in this section yet.</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {catDocs.map(doc => (
+                              <div key={doc.id} className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl">
+                                <FileText size={15} className="text-amber-600 shrink-0" />
+                                <div className="flex-grow min-w-0">
+                                  <p className="text-sm font-bold text-slate-800 truncate">{doc.title}</p>
+                                  <p className="text-[10px] text-slate-400 truncate">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
+                                </div>
+                                <div className="flex items-center gap-1 shrink-0">
+                                  <a href={doc.file_url} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
+                                    <Eye size={14} className="text-slate-500" />
+                                  </a>
+                                  <button onClick={() => handleDeleteDocument(doc.id, doc.file_path)} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
+                                    <Trash2 size={14} className="text-red-400" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
