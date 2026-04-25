@@ -66,34 +66,55 @@ const Library: React.FC = () => {
               <p className="font-semibold text-lg">{query ? 'No documents match your search.' : 'No documents available yet.'}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map(doc => (
-                <div key={doc.id} className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md hover:border-amber-200 transition-all flex flex-col">
-                  <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-4 shrink-0">
-                    <FileText className="text-amber-600" size={20} />
-                  </div>
-                  <h3 className="font-bold text-slate-900 font-serif mb-2 leading-snug">{doc.title}</h3>
-                  {doc.description && (
-                    <p className="text-sm text-slate-500 leading-relaxed mb-4 flex-grow">{doc.description}</p>
-                  )}
-                  <div className="flex items-center gap-1 text-xs text-slate-400 mb-5 mt-auto">
-                    <Calendar size={12} />
-                    <span>{new Date(doc.uploaded_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setViewer(doc)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-700 transition-colors"
-                    >
-                      <Eye size={14} /> View
-                    </button>
-                    <a
-                      href={doc.file_url}
-                      download={doc.file_name}
-                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-bold hover:bg-amber-100 transition-colors"
-                    >
-                      <Download size={14} /> Download
-                    </a>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((doc, index) => (
+                <div key={doc.id} className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-amber-300 transition-all duration-300 flex flex-col">
+                  {/* Coloured top bar */}
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-amber-600 w-full" />
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    {/* Icon + index */}
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                        <FileText className="text-amber-600" size={18} />
+                      </div>
+                      <span className="text-3xl font-black text-slate-100 font-serif select-none leading-none">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="font-bold text-slate-900 font-serif text-base leading-snug mb-2 group-hover:text-amber-700 transition-colors">
+                      {doc.title}
+                    </h3>
+
+                    {/* Description */}
+                    {doc.description && (
+                      <p className="text-sm text-slate-500 leading-relaxed mb-4 flex-grow line-clamp-2">{doc.description}</p>
+                    )}
+
+                    {/* Date */}
+                    <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-auto mb-5">
+                      <Calendar size={11} />
+                      <span>{new Date(doc.uploaded_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2 pt-4 border-t border-slate-100">
+                      <button
+                        onClick={() => setViewer(doc)}
+                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-amber-600 transition-colors"
+                      >
+                        <Eye size={13} /> View
+                      </button>
+                      <a
+                        href={doc.file_url}
+                        download={doc.file_name}
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:border-amber-400 hover:text-amber-600 transition-colors"
+                      >
+                        <Download size={13} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
