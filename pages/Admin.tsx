@@ -19,6 +19,7 @@ const Admin: React.FC = () => {
   const [docTitle, setDocTitle] = useState('');
   const [docDescription, setDocDescription] = useState('');
   const [docFile, setDocFile] = useState<File | null>(null);
+  const [docCategory, setDocCategory] = useState('');
   const [uploading, setUploading] = useState(false);
   const [docError, setDocError] = useState('');
 
@@ -42,11 +43,12 @@ const Admin: React.FC = () => {
     setDocError('');
     setUploading(true);
     try {
-      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim());
+      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim(), docCategory || undefined);
       if (doc) setDocuments(prev => [doc, ...prev]);
       setDocTitle('');
       setDocDescription('');
       setDocFile(null);
+      setDocCategory('');
     } catch (err: any) {
       setDocError(err.message || 'Upload failed.');
     } finally {
@@ -904,6 +906,19 @@ const Admin: React.FC = () => {
                         placeholder="Brief summary of the document…"
                         className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Compendium Category (optional)</label>
+                      <select
+                        value={docCategory}
+                        onChange={e => setDocCategory(e.target.value)}
+                        className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
+                      >
+                        <option value="">— No category (general) —</option>
+                        {state.compendium.map(cat => (
+                          <option key={cat.id} value={cat.title}>{cat.title}</option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">PDF File *</label>

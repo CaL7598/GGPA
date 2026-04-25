@@ -1,10 +1,12 @@
 
 import React from 'react';
 import { useContent } from '../context/ContentContext';
-import { Download, Book, Shield, FileText, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Book, Shield, FileText, ChevronRight, FolderOpen, ArrowRight } from 'lucide-react';
 
 const Compendium: React.FC = () => {
   const { state } = useContent();
+  const navigate = useNavigate();
   const categories = state.compendium;
 
   return (
@@ -53,21 +55,16 @@ const Compendium: React.FC = () => {
                 ))}
               </div>
 
-              {category.fileUrl ? (
-                <a
-                  href={category.fileUrl}
-                  download={category.fileName || `${category.title}.pdf`}
-                  className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-5 rounded-2xl font-bold hover:bg-amber-600 transition-all transform hover:-translate-y-1 shadow-lg"
-                >
-                  <Download size={20} />
-                  Download Executive Summary
-                </a>
-              ) : (
-                <button disabled className="w-full flex items-center justify-center gap-2 bg-slate-200 text-slate-400 py-5 rounded-2xl font-bold cursor-not-allowed shadow-sm">
-                  <Download size={20} />
-                  No Document Uploaded Yet
-                </button>
-              )}
+              <button
+                onClick={() => navigate(`/library?category=${encodeURIComponent(category.title)}`)}
+                className="w-full flex items-center justify-between gap-3 bg-slate-900 text-white px-7 py-5 rounded-2xl font-bold hover:bg-amber-600 transition-all transform hover:-translate-y-1 shadow-lg group/btn"
+              >
+                <span className="flex items-center gap-3">
+                  <FolderOpen size={20} />
+                  Browse {category.title} Documents
+                </span>
+                <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+              </button>
             </div>
           ))}
         </div>

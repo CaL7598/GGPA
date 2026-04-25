@@ -208,7 +208,7 @@ export const supabaseService = {
     return data || [];
   },
 
-  async uploadDocument(file: File, title: string, description: string): Promise<LibraryDocument | null> {
+  async uploadDocument(file: File, title: string, description: string, categoryName?: string): Promise<LibraryDocument | null> {
     if (!isSupabaseConfigured()) return null;
 
     const filePath = `documents/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
@@ -229,6 +229,7 @@ export const supabaseService = {
       file_url: urlData.publicUrl,
       file_name: file.name,
       file_path: filePath,
+      category_name: categoryName || null,
     };
 
     const { data, error: insertError } = await supabase

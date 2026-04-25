@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, FileText, Download, Search, Eye, X, Calendar } from 'lucide-react';
+import { BookOpen, FileText, Download, Search, Eye, X, Calendar, ArrowLeft } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabaseService } from '../lib/supabaseService';
 import { LibraryDocument } from '../types';
 
@@ -8,6 +9,10 @@ const Library: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [viewer, setViewer] = useState<LibraryDocument | null>(null);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const categoryFilter = searchParams.get('category') || '';
 
   useEffect(() => {
     supabaseService.getDocuments()
@@ -16,10 +21,12 @@ const Library: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = documents.filter(d =>
-    d.title.toLowerCase().includes(query.toLowerCase()) ||
-    (d.description || '').toLowerCase().includes(query.toLowerCase())
-  );
+  const filtered = documents
+    .filter(d => !categoryFilter || d.category_name === categoryFilter)
+    .filter(d =>
+      d.title.toLowerCase().includes(query.toLowerCase()) ||
+      (d.description || '').toLowerCase().includes(query.toLowerCase())
+    );
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -36,6 +43,24 @@ const Library: React.FC = () => {
           </p>
         </div>
       </section>
+
+      {/* Category filter banner */}
+      {categoryFilter && (
+        <section className="bg-amber-50 border-b border-amber-200 py-4 px-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-amber-600">Filtering by:</span>
+              <span className="px-3 py-1 bg-amber-600 text-white text-xs font-bold rounded-full">{categoryFilter}</span>
+            </div>
+            <button
+              onClick={() => navigate('/library')}
+              className="flex items-center gap-2 text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors"
+            >
+              <ArrowLeft size={14} /> View all documents
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* Search */}
       <section className="bg-white border-b py-5 px-4 sticky top-16 z-30 shadow-sm">
