@@ -24,6 +24,7 @@ const Admin: React.FC = () => {
   const [docError, setDocError] = useState('');
   const [pdfUploading, setPdfUploading] = useState('');
   const [catSaved, setCatSaved] = useState('');
+  const [confirmDeleteId, setConfirmDeleteId] = useState('');
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -1013,19 +1014,42 @@ const Admin: React.FC = () => {
                       </div>
                       <div className="space-y-2">
                         {catDocs.map(doc => (
-                          <div key={doc.id} className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl">
+                          <div key={doc.id} className={`flex items-center gap-3 p-3 bg-white border rounded-xl transition-colors ${confirmDeleteId === doc.id ? 'border-red-200 bg-red-50' : 'border-slate-200'}`}>
                             <FileText size={15} className="text-amber-600 shrink-0" />
                             <div className="flex-grow min-w-0">
                               <p className="text-sm font-bold text-slate-800 truncate">{doc.title}</p>
                               <p className="text-[10px] text-slate-400 truncate">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
                             </div>
-                            <div className="flex items-center gap-1 shrink-0">
-                              <a href={doc.file_url} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
-                                <Eye size={14} className="text-slate-500" />
-                              </a>
-                              <button onClick={() => handleDeleteDocument(doc.id, doc.file_path)} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
-                                <Trash2 size={14} className="text-red-400" />
-                              </button>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {confirmDeleteId === doc.id ? (
+                                <>
+                                  <span className="text-xs text-red-600 font-bold">Delete this document?</span>
+                                  <button
+                                    onClick={() => { handleDeleteDocument(doc.id, doc.file_path); setConfirmDeleteId(''); }}
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors"
+                                  >
+                                    <Trash2 size={12} /> Yes, delete
+                                  </button>
+                                  <button
+                                    onClick={() => setConfirmDeleteId('')}
+                                    className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <a href={doc.file_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">
+                                    <Eye size={12} /> View
+                                  </a>
+                                  <button
+                                    onClick={() => setConfirmDeleteId(doc.id)}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors"
+                                  >
+                                    <Trash2 size={12} /> Delete
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                         ))}
