@@ -109,13 +109,14 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         if (isSupabaseConfigured()) {
           // Load from Supabase
-          const [hero, founder, news, programs, contact, gallery] = await Promise.all([
+          const [hero, founder, news, programs, contact, gallery, compendium] = await Promise.all([
             supabaseService.getHero().catch(() => null),
             supabaseService.getFounder().catch(() => null),
             supabaseService.getNews().catch(() => []),
             supabaseService.getPrograms().catch(() => null),
             supabaseService.getContact().catch(() => null),
             supabaseService.getGallery().catch(() => []),
+            supabaseService.getCompendium().catch(() => null),
           ]);
 
           setState(prev => ({
@@ -126,6 +127,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
             programs: programs || prev.programs,
             contact: contact || prev.contact,
             gallery: gallery.length > 0 ? gallery : prev.gallery,
+            compendium: compendium || prev.compendium,
             navigation: savedNav,
             footer: savedFooter,
           }));
@@ -254,7 +256,16 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const updateCompendium = (compendium: VolumeCategory[]) => setState(prev => ({ ...prev, compendium }));
+  const updateCompendium = async (compendium: VolumeCategory[]) => {
+    setState(prev => ({ ...prev, compendium }));
+    if (isSupabaseConfigured()) {
+      try {
+        await supabaseService.saveCompendium(compendium);
+      } catch (error) {
+        console.error('Error saving compendium:', error);
+      }
+    }
+  };
 
   const updateContact = async (contact: ContactInfo) => {
     setState(prev => ({ ...prev, contact }));

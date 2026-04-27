@@ -72,6 +72,7 @@ export const TABLES = {
   GALLERY: 'gallery',
   STATS: 'stats',
   DOCUMENTS: 'documents',
+  COMPENDIUM: 'compendium_config',
 } as const;
 
 // Storage bucket name (single bucket for all media including PDFs)

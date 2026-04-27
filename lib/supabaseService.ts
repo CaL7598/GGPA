@@ -1,5 +1,5 @@
 import { supabase, TABLES, STORAGE_BUCKET, DOCUMENTS_BUCKET, isSupabaseConfigured } from './supabase';
-import { AppState, NewsItem, GalleryImage, ContactInfo, Programs, LibraryDocument } from '../types';
+import { AppState, NewsItem, GalleryImage, ContactInfo, Programs, LibraryDocument, VolumeCategory } from '../types';
 
 // Helper to upload image to Supabase Storage
 export const uploadImage = async (file: File, path: string): Promise<string | null> => {
@@ -240,6 +240,30 @@ export const supabaseService = {
 
     if (insertError) throw insertError;
     return data;
+  },
+
+  // Compendium
+  async getCompendium(): Promise<VolumeCategory[] | null> {
+    if (!isSupabaseConfigured()) return null;
+
+    const { data, error } = await supabase
+      .from(TABLES.COMPENDIUM)
+      .select('data')
+      .eq('id', 1)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    return data?.data || null;
+  },
+
+  async saveCompendium(categories: VolumeCategory[]) {
+    if (!isSupabaseConfigured()) return;
+
+    const { error } = await supabase
+      .from(TABLES.COMPENDIUM)
+      .upsert({ id: 1, data: categories }, { onConflict: 'id' });
+
+    if (error) throw error;
   },
 
   async deleteDocument(id: string, filePath: string) {

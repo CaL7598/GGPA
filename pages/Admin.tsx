@@ -22,6 +22,8 @@ const Admin: React.FC = () => {
   const [docFile, setDocFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [docError, setDocError] = useState('');
+  const [pdfUploading, setPdfUploading] = useState('');
+  const [catSaved, setCatSaved] = useState('');
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -590,12 +592,12 @@ const Admin: React.FC = () => {
                     <div key={category.id} className="p-6 bg-slate-50 rounded-2xl border border-slate-200">
                       <div className="mb-4">
                         <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Category Name</label>
-                        <input 
-                          type="text" 
-                          value={category.name}
+                        <input
+                          type="text"
+                          value={category.title}
                           onChange={(e) => {
                             const newCompendium = [...state.compendium];
-                            newCompendium[categoryIndex] = { ...category, name: e.target.value };
+                            newCompendium[categoryIndex] = { ...category, title: e.target.value };
                             updateCompendium(newCompendium);
                           }}
                           className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-bold"
@@ -603,7 +605,7 @@ const Admin: React.FC = () => {
                       </div>
                       <div className="mb-4">
                         <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description</label>
-                        <textarea 
+                        <textarea
                           rows={2}
                           value={category.description}
                           onChange={(e) => {
@@ -615,17 +617,17 @@ const Admin: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Volumes</label>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Volumes <span className="normal-case font-normal text-slate-400">(comma-separated)</span></label>
                         <input
                           type="text"
-                          value={category.volumes}
+                          value={Array.isArray(category.volumes) ? category.volumes.join(', ') : category.volumes}
                           onChange={(e) => {
                             const newCompendium = [...state.compendium];
-                            newCompendium[categoryIndex] = { ...category, volumes: e.target.value };
+                            newCompendium[categoryIndex] = { ...category, volumes: e.target.value.split(',').map(v => v.trim()).filter(Boolean) };
                             updateCompendium(newCompendium);
                           }}
                           className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium"
-                          placeholder="e.g., Vols I-VIII"
+                          placeholder="e.g. Act 992 Compliance, Audit Trails"
                         />
                       </div>
 
@@ -636,39 +638,70 @@ const Admin: React.FC = () => {
                           <div className="flex items-center gap-3 mb-3 p-3 bg-green-50 border border-green-200 rounded-xl">
                             <FileText size={16} className="text-green-600 shrink-0" />
                             <span className="text-xs text-green-700 font-medium truncate flex-grow">{category.fileName || 'Document uploaded'}</span>
+                            <a href={category.fileUrl} target="_blank" rel="noreferrer" className="p-1.5 hover:bg-green-100 rounded-lg transition-colors shrink-0">
+                              <Eye size={14} className="text-green-600" />
+                            </a>
                             <button
                               onClick={() => {
                                 const newCompendium = [...state.compendium];
                                 newCompendium[categoryIndex] = { ...category, fileUrl: undefined, fileName: undefined };
                                 updateCompendium(newCompendium);
                               }}
-                              className="text-red-500 hover:text-red-700 shrink-0"
+                              className="p-1.5 hover:bg-red-50 rounded-lg transition-colors shrink-0"
                             >
-                              <Trash2 size={14} />
+                              <Trash2 size={14} className="text-red-500" />
                             </button>
                           </div>
                         ) : null}
-                        <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
-                          <Upload size={16} className="text-slate-400 shrink-0" />
-                          <span className="text-xs text-slate-500 font-medium">
-                            {category.fileUrl ? 'Replace PDF' : 'Upload PDF'}
-                          </span>
+                        <label className={`flex items-center gap-3 p-3 rounded-xl border-2 border-dashed bg-white cursor-pointer transition-colors ${pdfUploading === category.id ? 'border-amber-400 opacity-60 cursor-not-allowed' : 'border-slate-300 hover:border-amber-400'}`}>
+                          {pdfUploading === category.id
+                            ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-500 shrink-0" /><span className="text-xs text-amber-600 font-medium">Uploading…</span></>
+                            : <><Upload size={16} className="text-slate-400 shrink-0" /><span className="text-xs text-slate-500 font-medium">{category.fileUrl ? 'Replace PDF' : 'Upload PDF'}</span></>
+                          }
                           <input
                             type="file"
                             accept="application/pdf"
                             className="hidden"
+                            disabled={pdfUploading === category.id}
                             onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const url = await uploadImage(file, 'compendium');
-                              if (url) {
-                                const newCompendium = [...state.compendium];
-                                newCompendium[categoryIndex] = { ...category, fileUrl: url, fileName: file.name };
-                                updateCompendium(newCompendium);
+                              setPdfUploading(category.id);
+                              try {
+                                const url = await uploadImage(file, 'compendium');
+                                if (url) {
+                                  const newCompendium = [...state.compendium];
+                                  newCompendium[categoryIndex] = { ...category, fileUrl: url, fileName: file.name };
+                                  await updateCompendium(newCompendium);
+                                  setCatSaved(category.id);
+                                  setTimeout(() => setCatSaved(''), 3000);
+                                }
+                              } finally {
+                                setPdfUploading('');
+                                e.target.value = '';
                               }
                             }}
                           />
                         </label>
+                      </div>
+
+                      {/* Save button */}
+                      <div className="mt-4 flex items-center justify-end gap-3">
+                        {catSaved === category.id && (
+                          <span className="flex items-center gap-1.5 text-xs text-green-600 font-bold">
+                            <Check size={14} /> Saved successfully
+                          </span>
+                        )}
+                        <button
+                          onClick={async () => {
+                            await updateCompendium(state.compendium);
+                            setCatSaved(category.id);
+                            setTimeout(() => setCatSaved(''), 3000);
+                          }}
+                          className="flex items-center gap-2 bg-amber-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-amber-700 transition-all"
+                        >
+                          <Save size={14} /> Save Changes
+                        </button>
                       </div>
                     </div>
                   ))}
