@@ -9,6 +9,20 @@ import { uploadImage, supabaseService } from '../lib/supabaseService';
 import { supabase } from '../lib/supabase';
 import { LibraryDocument } from '../types';
 
+const PAGE_SECTIONS = [
+  { value: 'IIGRA Diagnostic',       label: 'IIGRA Diagnostic',       page: '#/iigra' },
+  { value: 'Advisory Services',      label: 'Advisory Services',      page: '#/services' },
+  { value: 'Compliance Suite',       label: 'Compliance Suite',       page: '#/technical-core/compliance' },
+  { value: 'Diplomacy Suite',        label: 'Diplomacy Suite',        page: '#/technical-core/diplomacy' },
+  { value: 'Technical Suite',        label: 'Technical Suite',        page: '#/technical-core/technical' },
+  { value: 'Youth Governance',       label: 'Youth Governance',       page: '#/youth' },
+  { value: 'Diplomatic Engagement',  label: 'Diplomatic Engagement',  page: '#/diplomacy' },
+  { value: 'Partnerships',           label: 'Partnerships',           page: '#/partnerships' },
+  { value: 'Strategic Commitments',  label: 'Strategic Commitments',  page: '#/strategic-commitments' },
+  { value: 'Legal & Compliance',     label: 'Legal & Compliance',     page: '#/legal-compliance' },
+  { value: 'Safeguarding & Ethics',  label: 'Safeguarding & Ethics',  page: '#/safeguarding' },
+];
+
 const Admin: React.FC = () => {
   const { user, loading: authLoading, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -67,6 +81,47 @@ const Admin: React.FC = () => {
     await supabaseService.deleteDocument(id, filePath).catch(console.error);
     setDocuments(prev => prev.filter(d => d.id !== id));
   };
+
+  const renderDocRow = (doc: LibraryDocument) => (
+    <div key={doc.id} className={`flex items-center gap-3 p-3 bg-white border rounded-xl transition-colors ${confirmDeleteId === doc.id ? 'border-red-200 bg-red-50' : 'border-slate-200'}`}>
+      <FileText size={15} className="text-amber-600 shrink-0" />
+      <div className="flex-grow min-w-0">
+        <p className="text-sm font-bold text-slate-800 truncate">{doc.title}</p>
+        <p className="text-[10px] text-slate-400 truncate">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        {confirmDeleteId === doc.id ? (
+          <>
+            <span className="text-xs text-red-600 font-bold">Delete?</span>
+            <button
+              onClick={() => { handleDeleteDocument(doc.id, doc.file_path); setConfirmDeleteId(''); }}
+              className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors"
+            >
+              <Trash2 size={12} /> Yes
+            </button>
+            <button
+              onClick={() => setConfirmDeleteId('')}
+              className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors"
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <a href={doc.file_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">
+              <Eye size={12} /> View
+            </a>
+            <button
+              onClick={() => setConfirmDeleteId(doc.id)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors"
+            >
+              <Trash2 size={12} /> Delete
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
 
   if (authLoading) {
     return (
@@ -917,23 +972,23 @@ const Admin: React.FC = () => {
             <div className="space-y-8 animate-in slide-in-from-right duration-500">
               <div>
                 <h3 className="text-xl font-bold font-serif mb-1 flex items-center gap-2">
-                  <BookOpen className="text-amber-600" size={24} /> Library &amp; Repository
+                  <BookOpen className="text-amber-600" size={24} /> Library &amp; Document Repository
                 </h3>
-                <p className="text-sm text-slate-500">Select a category then upload the document.</p>
+                <p className="text-sm text-slate-500">Select which page the document belongs to, fill in the details, then upload the PDF.</p>
               </div>
 
               {/* Upload form */}
-              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-5">
                 <h4 className="text-sm font-bold text-slate-700 uppercase tracking-widest">Upload New Document</h4>
 
-                {/* Step 1 — Category */}
+                {/* Step 1 — Category: Website Pages */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">1. Select Category *</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {[
-                      ...state.compendium.map(cat => ({ value: cat.title, label: cat.title, sub: cat.range })),
-                      { value: 'general', label: 'General / Uncategorized', sub: 'No specific category' },
-                    ].map(opt => (
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">1. Select Destination Page / Category *</label>
+
+                  {/* Website pages group */}
+                  <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">Website Pages</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+                    {PAGE_SECTIONS.map(opt => (
                       <button
                         key={opt.value}
                         type="button"
@@ -941,24 +996,83 @@ const Admin: React.FC = () => {
                         className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
                           docCategory === opt.value
                             ? 'border-amber-500 bg-amber-50'
-                            : 'border-slate-200 bg-white hover:border-slate-300'
+                            : 'border-slate-200 bg-white hover:border-amber-300'
                         }`}
                       >
                         <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${docCategory === opt.value ? 'bg-amber-500' : 'bg-slate-100'}`}>
-                          <BookOpen size={13} className={docCategory === opt.value ? 'text-white' : 'text-slate-400'} />
+                          <FileText size={13} className={docCategory === opt.value ? 'text-white' : 'text-slate-400'} />
                         </div>
                         <div className="min-w-0">
                           <p className={`text-xs font-bold truncate ${docCategory === opt.value ? 'text-amber-800' : 'text-slate-700'}`}>{opt.label}</p>
-                          <p className="text-[10px] text-slate-400">{opt.sub}</p>
+                          <p className="text-[10px] text-slate-400">{opt.page}</p>
                         </div>
                       </button>
                     ))}
+                  </div>
+
+                  {/* Compendium categories group */}
+                  {state.compendium.length > 0 && (
+                    <>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Compendium Categories</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                        {state.compendium.map(cat => (
+                          <button
+                            key={cat.title}
+                            type="button"
+                            onClick={() => setDocCategory(cat.title)}
+                            className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
+                              docCategory === cat.title
+                                ? 'border-amber-500 bg-amber-50'
+                                : 'border-slate-200 bg-white hover:border-amber-300'
+                            }`}
+                          >
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${docCategory === cat.title ? 'bg-amber-500' : 'bg-slate-100'}`}>
+                              <BookOpen size={13} className={docCategory === cat.title ? 'text-white' : 'text-slate-400'} />
+                            </div>
+                            <div className="min-w-0">
+                              <p className={`text-xs font-bold truncate ${docCategory === cat.title ? 'text-amber-800' : 'text-slate-700'}`}>{cat.title}</p>
+                              <p className="text-[10px] text-slate-400">{cat.range || 'Compendium'}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {/* General */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setDocCategory('general')}
+                      className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
+                        docCategory === 'general'
+                          ? 'border-amber-500 bg-amber-50'
+                          : 'border-slate-200 bg-white hover:border-amber-300'
+                      }`}
+                    >
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${docCategory === 'general' ? 'bg-amber-500' : 'bg-slate-100'}`}>
+                        <FileText size={13} className={docCategory === 'general' ? 'text-white' : 'text-slate-400'} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className={`text-xs font-bold truncate ${docCategory === 'general' ? 'text-amber-800' : 'text-slate-700'}`}>General / Uncategorized</p>
+                        <p className="text-[10px] text-slate-400">No specific page</p>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
                 {/* Step 2 — Details + file (shown only after category selected) */}
                 {docCategory && (
                   <>
+                    <div className="pt-2 border-t border-slate-200">
+                      <div className="flex items-center gap-2 mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                        <Check size={14} className="text-amber-600 shrink-0" />
+                        <p className="text-xs font-bold text-amber-800">
+                          Uploading to: <span className="font-black">{docCategory === 'general' ? 'General / Uncategorized' : docCategory}</span>
+                        </p>
+                        <button onClick={() => setDocCategory('')} className="ml-auto text-[10px] text-amber-600 underline font-bold">Change</button>
+                      </div>
+                    </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">2. Document Title *</label>
                       <input
@@ -1023,67 +1137,73 @@ const Admin: React.FC = () => {
                 )}
               </div>
 
-              {/* Document list grouped by category */}
-              <div className="space-y-6">
-                {[
-                  ...state.compendium.map(cat => ({ key: cat.title, label: cat.title, badge: cat.range })),
-                  { key: 'general', label: 'General / Uncategorized', badge: '' },
-                ].map(({ key, label, badge }) => {
-                  const catDocs = documents.filter(d => key === 'general' ? !d.category_name : d.category_name === key);
-                  if (catDocs.length === 0) return null;
-                  return (
-                    <div key={key}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{label}</p>
-                        {badge && <span className="text-[10px] text-amber-600 font-bold">{badge}</span>}
-                        <span className="ml-auto text-xs text-slate-400">{catDocs.length} doc{catDocs.length !== 1 ? 's' : ''}</span>
+              {/* Document list grouped by all categories */}
+              {documents.length > 0 && (
+                <div className="space-y-8">
+                  <h4 className="text-sm font-bold text-slate-700 uppercase tracking-widest">Uploaded Documents</h4>
+
+                  {/* Website page sections */}
+                  {PAGE_SECTIONS.map(section => {
+                    const sectionDocs = documents.filter(d => d.category_name === section.value);
+                    if (sectionDocs.length === 0) return null;
+                    return (
+                      <div key={section.value}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                          <p className="text-xs font-bold text-slate-700 uppercase tracking-widest">{section.label}</p>
+                          <a href={section.page} className="text-[10px] text-amber-600 font-bold hover:underline">{section.page}</a>
+                          <span className="ml-auto text-xs text-slate-400">{sectionDocs.length} doc{sectionDocs.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div className="space-y-2">{sectionDocs.map(doc => renderDocRow(doc))}</div>
                       </div>
-                      <div className="space-y-2">
-                        {catDocs.map(doc => (
-                          <div key={doc.id} className={`flex items-center gap-3 p-3 bg-white border rounded-xl transition-colors ${confirmDeleteId === doc.id ? 'border-red-200 bg-red-50' : 'border-slate-200'}`}>
-                            <FileText size={15} className="text-amber-600 shrink-0" />
-                            <div className="flex-grow min-w-0">
-                              <p className="text-sm font-bold text-slate-800 truncate">{doc.title}</p>
-                              <p className="text-[10px] text-slate-400 truncate">{doc.file_name} · {new Date(doc.uploaded_at).toLocaleDateString()}</p>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              {confirmDeleteId === doc.id ? (
-                                <>
-                                  <span className="text-xs text-red-600 font-bold">Delete this document?</span>
-                                  <button
-                                    onClick={() => { handleDeleteDocument(doc.id, doc.file_path); setConfirmDeleteId(''); }}
-                                    className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition-colors"
-                                  >
-                                    <Trash2 size={12} /> Yes, delete
-                                  </button>
-                                  <button
-                                    onClick={() => setConfirmDeleteId('')}
-                                    className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors"
-                                  >
-                                    Cancel
-                                  </button>
-                                </>
-                              ) : (
-                                <>
-                                  <a href={doc.file_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">
-                                    <Eye size={12} /> View
-                                  </a>
-                                  <button
-                                    onClick={() => setConfirmDeleteId(doc.id)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-bold hover:bg-red-100 transition-colors"
-                                  >
-                                    <Trash2 size={12} /> Delete
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        ))}
+                    );
+                  })}
+
+                  {/* Compendium categories */}
+                  {state.compendium.map(cat => {
+                    const catDocs = documents.filter(d => d.category_name === cat.title);
+                    if (catDocs.length === 0) return null;
+                    return (
+                      <div key={cat.title}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="w-2 h-2 rounded-full bg-slate-400 shrink-0" />
+                          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{cat.title}</p>
+                          {cat.range && <span className="text-[10px] text-slate-400">{cat.range}</span>}
+                          <span className="ml-auto text-xs text-slate-400">{catDocs.length} doc{catDocs.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div className="space-y-2">{catDocs.map(doc => renderDocRow(doc))}</div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+
+                  {/* General */}
+                  {(() => {
+                    const knownCategories = new Set([
+                      ...PAGE_SECTIONS.map(s => s.value),
+                      ...state.compendium.map(c => c.title),
+                    ]);
+                    const generalDocs = documents.filter(d => !d.category_name || !knownCategories.has(d.category_name));
+                    if (generalDocs.length === 0) return null;
+                    return (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="w-2 h-2 rounded-full bg-slate-300 shrink-0" />
+                          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">General / Uncategorized</p>
+                          <span className="ml-auto text-xs text-slate-400">{generalDocs.length} doc{generalDocs.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div className="space-y-2">{generalDocs.map(doc => renderDocRow(doc))}</div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {documents.length === 0 && (
+                <div className="text-center py-12 text-slate-400">
+                  <BookOpen size={36} className="mx-auto mb-3 opacity-40" />
+                  <p className="text-sm font-medium">No documents uploaded yet. Use the form above to upload your first document.</p>
+                </div>
+              )}
             </div>
           )}
         </div>
