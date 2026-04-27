@@ -20,6 +20,8 @@ const Admin: React.FC = () => {
   const [docTitle, setDocTitle] = useState('');
   const [docDescription, setDocDescription] = useState('');
   const [docFile, setDocFile] = useState<File | null>(null);
+  const [docDoi, setDocDoi] = useState('');
+  const [docRefCode, setDocRefCode] = useState('');
   const [uploading, setUploading] = useState(false);
   const [docError, setDocError] = useState('');
   const [pdfUploading, setPdfUploading] = useState('');
@@ -46,11 +48,13 @@ const Admin: React.FC = () => {
     setUploading(true);
     try {
       const categoryName = docCategory === 'general' ? undefined : docCategory;
-      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim(), categoryName);
+      const doc = await supabaseService.uploadDocument(docFile, docTitle.trim(), docDescription.trim(), categoryName, docDoi.trim() || undefined, docRefCode.trim() || undefined);
       if (doc) setDocuments(prev => [doc, ...prev]);
       setDocTitle('');
       setDocDescription('');
       setDocFile(null);
+      setDocDoi('');
+      setDocRefCode('');
       setDocCategory('');
     } catch (err: any) {
       setDocError(err.message || 'Upload failed.');
@@ -975,8 +979,30 @@ const Admin: React.FC = () => {
                         className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium text-sm"
                       />
                     </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. Reference Code (optional)</label>
+                        <input
+                          type="text"
+                          value={docRefCode}
+                          onChange={e => setDocRefCode(e.target.value)}
+                          placeholder="e.g. GGPA-COMP-2026-A992"
+                          className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">5. DOI / URL (optional)</label>
+                        <input
+                          type="url"
+                          value={docDoi}
+                          onChange={e => setDocDoi(e.target.value)}
+                          placeholder="https://doi.org/10.5281/zenodo.xxxxx"
+                          className="w-full p-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 bg-white font-medium text-sm"
+                        />
+                      </div>
+                    </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">4. PDF File *</label>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">6. PDF File *</label>
                       <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-dashed border-slate-300 bg-white cursor-pointer hover:border-amber-400 transition-colors">
                         <Upload size={18} className="text-slate-400 shrink-0" />
                         <span className="text-sm text-slate-500 font-medium truncate">

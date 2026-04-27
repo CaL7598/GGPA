@@ -1,12 +1,45 @@
 
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronRight, Search, Globe, Mail, Phone, MapPin } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, ChevronRight, ChevronDown, Globe, Mail, Phone, MapPin } from 'lucide-react';
 import logo from '../assets/Logo/logo.png';
 import { useContent } from '../context/ContentContext';
+
+const dropdownGroups = [
+  {
+    label: 'Technical Core',
+    items: [
+      { name: 'IIGRA Diagnostic', href: '#/iigra' },
+      { name: 'Advisory Services', href: '#/services' },
+      { name: 'Compliance Suite', href: '#/technical-core/compliance' },
+      { name: 'Diplomacy Suite', href: '#/technical-core/diplomacy' },
+      { name: 'Technical Suite', href: '#/technical-core/technical' },
+    ],
+  },
+  {
+    label: 'Knowledge',
+    items: [
+      { name: 'Compendium', href: '#/compendium' },
+      { name: 'Knowledge Hub', href: '#/knowledge-hub' },
+      { name: 'News', href: '#/news' },
+    ],
+  },
+  {
+    label: 'Engagement',
+    items: [
+      { name: 'Youth Governance', href: '#/youth' },
+      { name: 'Partnerships', href: '#/partnerships' },
+      { name: 'Diplomatic Engagement', href: '#/diplomacy' },
+      { name: 'Strategic Commitments', href: '#/strategic-commitments' },
+    ],
+  },
+];
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileOpenGroup, setMobileOpenGroup] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { state } = useContent();
   
   // Get contact info with fallback to defaults
@@ -21,6 +54,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -55,16 +98,53 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+            <div ref={dropdownRef} className="hidden md:flex items-center space-x-1 lg:space-x-3">
               {(state.navigation || []).map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`text-xs lg:text-sm font-semibold hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
+                  className={`text-xs lg:text-sm font-semibold px-2 py-1 rounded hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
                 >
                   {link.name}
                 </a>
               ))}
+              {dropdownGroups.map((group) => (
+                <div key={group.label} className="relative">
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === group.label ? null : group.label)}
+                    className={`flex items-center gap-1 text-xs lg:text-sm font-semibold px-2 py-1 rounded hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
+                  >
+                    {group.label}
+                    <ChevronDown size={13} className={`transition-transform ${openDropdown === group.label ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openDropdown === group.label && (
+                    <div className="absolute top-full left-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-1 z-50">
+                      {group.items.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => setOpenDropdown(null)}
+                          className="block px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <a
+                href="#/legal-compliance"
+                className={`text-xs lg:text-sm font-semibold px-2 py-1 rounded hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
+              >
+                Legal
+              </a>
+              <a
+                href="#/safeguarding"
+                className={`text-xs lg:text-sm font-semibold px-2 py-1 rounded hover:text-amber-600 transition-colors ${scrolled ? 'text-slate-600' : 'text-slate-700'}`}
+              >
+                Safeguarding
+              </a>
             </div>
 
             {/* Mobile menu button */}
@@ -78,18 +158,45 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t animate-in slide-in-from-top duration-300">
-            <div className="px-4 pt-2 pb-6 space-y-2">
+          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t">
+            <div className="px-4 pt-2 pb-6 space-y-1 max-h-[80vh] overflow-y-auto">
               {(state.navigation || []).map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="block px-3 py-4 text-base font-semibold text-slate-700 hover:bg-slate-50 border-b"
+                  className="block px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 border-b"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
                 </a>
               ))}
+              {dropdownGroups.map((group) => (
+                <div key={group.label}>
+                  <button
+                    onClick={() => setMobileOpenGroup(mobileOpenGroup === group.label ? null : group.label)}
+                    className="w-full flex items-center justify-between px-3 py-3 text-sm font-bold text-slate-900 hover:bg-slate-50 border-b"
+                  >
+                    {group.label}
+                    <ChevronDown size={14} className={`transition-transform ${mobileOpenGroup === group.label ? 'rotate-180' : ''}`} />
+                  </button>
+                  {mobileOpenGroup === group.label && (
+                    <div className="bg-slate-50 border-b">
+                      {group.items.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="block pl-7 pr-3 py-2.5 text-sm font-medium text-slate-600 hover:text-amber-700 border-b border-slate-100 last:border-0"
+                          onClick={() => { setIsMenuOpen(false); setMobileOpenGroup(null); }}
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <a href="#/legal-compliance" className="block px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 border-b" onClick={() => setIsMenuOpen(false)}>Legal & Compliance</a>
+              <a href="#/safeguarding" className="block px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 border-b" onClick={() => setIsMenuOpen(false)}>Safeguarding</a>
             </div>
           </div>
         )}

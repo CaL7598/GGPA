@@ -83,6 +83,8 @@ export interface LibraryDocument {
   file_path: string;
   uploaded_at: string;
   category_name?: string;
+  doi_url?: string;
+  reference_code?: string;
 }
 
 export interface AppState {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, FileText, Download, Search, Eye, X, Calendar, ArrowLeft } from 'lucide-react';
+import { BookOpen, FileText, Download, Search, Eye, X, Calendar, ArrowLeft, ExternalLink, Hash } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabaseService } from '../lib/supabaseService';
 import { LibraryDocument } from '../types';
@@ -116,6 +116,23 @@ const Library: React.FC = () => {
                     {/* Description */}
                     {doc.description && (
                       <p className="text-sm text-slate-500 leading-relaxed mb-4 flex-grow line-clamp-2">{doc.description}</p>
+                    )}
+
+                    {/* Reference code + DOI */}
+                    {(doc.reference_code || doc.doi_url) && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {doc.reference_code && (
+                          <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-full">
+                            <Hash size={9} />{doc.reference_code}
+                          </span>
+                        )}
+                        {doc.doi_url && (
+                          <a href={doc.doi_url} target="_blank" rel="noreferrer"
+                            className="flex items-center gap-1 text-[10px] font-bold px-2 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full hover:bg-amber-100 transition-colors">
+                            <ExternalLink size={9} />DOI
+                          </a>
+                        )}
+                      </div>
                     )}
 
                     {/* Date */}

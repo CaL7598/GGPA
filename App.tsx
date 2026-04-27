@@ -14,6 +14,17 @@ import NewsPage from './pages/NewsPage';
 import ArticlePage from './pages/ArticlePage';
 import Application from './pages/Application';
 import Library from './pages/Library';
+import IIGRAPage from './pages/IIGRAPage';
+import ServicesPage from './pages/ServicesPage';
+import ComplianceSuite from './pages/ComplianceSuite';
+import DiplomacySuite from './pages/DiplomacySuite';
+import TechnicalSuite from './pages/TechnicalSuite';
+import YouthGovernance from './pages/YouthGovernance';
+import DiplomaticEngagement from './pages/DiplomaticEngagement';
+import PartnershipsPage from './pages/PartnershipsPage';
+import StrategicCommitments from './pages/StrategicCommitments';
+import LegalCompliance from './pages/LegalCompliance';
+import Safeguarding from './pages/Safeguarding';
 import { ContentProvider } from './context/ContentContext';
 import { AuthProvider } from './context/AuthContext';
 
@@ -98,6 +109,18 @@ const App: React.FC = () => {
                 <Route path="/news/:id" element={<ArticlePage />} />
                 <Route path="/application" element={<Application />} />
                 <Route path="/library" element={<Library />} />
+                <Route path="/knowledge-hub" element={<Library />} />
+                <Route path="/iigra" element={<IIGRAPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/technical-core/compliance" element={<ComplianceSuite />} />
+                <Route path="/technical-core/diplomacy" element={<DiplomacySuite />} />
+                <Route path="/technical-core/technical" element={<TechnicalSuite />} />
+                <Route path="/youth" element={<YouthGovernance />} />
+                <Route path="/diplomacy" element={<DiplomaticEngagement />} />
+                <Route path="/partnerships" element={<PartnershipsPage />} />
+                <Route path="/strategic-commitments" element={<StrategicCommitments />} />
+                <Route path="/legal-compliance" element={<LegalCompliance />} />
+                <Route path="/safeguarding" element={<Safeguarding />} />
               </Routes>
             </Layout>
           </Router>
